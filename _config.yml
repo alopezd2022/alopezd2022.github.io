@@ -21,8 +21,7 @@
 title: MOBILE ROBOTICS PRACTICES
 email: a.lopezd.2022@alumnos.urjc.es
 github_username:  alopezd2022
-stylesheets:
-  - "css/estilos.css"
+baseurl: ""
 # Build settings
 theme: minima
 plugins:
