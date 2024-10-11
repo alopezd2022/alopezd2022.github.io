@@ -7,8 +7,8 @@
 <meta name="generator" content="Jekyll v4.3.4" />
 <meta property="og:title" content="P2 Follow Line" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="Description Hardware Software Conclusion" />
-<meta property="og:description" content="Description Hardware Software Conclusion" />
+<meta name="description" content="Description El objetivo de esta practica es realizar un sigue linea que complete el circuito el menor tiempo posible. En este caso, el coche de formula 1 sigue una linea de color rojo y" />
+<meta property="og:description" content="Description El objetivo de esta practica es realizar un sigue linea que complete el circuito el menor tiempo posible. En este caso, el coche de formula 1 sigue una linea de color rojo y" />
 <link rel="canonical" href="http://localhost:4000/2024/09/30/p2-follow-line.html" />
 <meta property="og:url" content="http://localhost:4000/2024/09/30/p2-follow-line.html" />
 <meta property="og:site_name" content="MOBILE ROBOTICS PRACTICES" />
@@ -17,7 +17,7 @@
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="P2 Follow Line" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2024-09-30T00:00:00+02:00","datePublished":"2024-09-30T00:00:00+02:00","description":"Description Hardware Software Conclusion","headline":"P2 Follow Line","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2024/09/30/p2-follow-line.html"},"url":"http://localhost:4000/2024/09/30/p2-follow-line.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2024-09-30T00:00:00+02:00","datePublished":"2024-09-30T00:00:00+02:00","description":"Description El objetivo de esta practica es realizar un sigue linea que complete el circuito el menor tiempo posible. En este caso, el coche de formula 1 sigue una linea de color rojo y","headline":"P2 Follow Line","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2024/09/30/p2-follow-line.html"},"url":"http://localhost:4000/2024/09/30/p2-follow-line.html"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="MOBILE ROBOTICS PRACTICES" /></head>
 <body><header class="site-header" role="banner">
@@ -48,8 +48,42 @@
 
   <div class="post-content e-content" itemprop="articleBody">
     <h2 id="description">Description</h2>
+<p>El objetivo de esta practica es realizar un sigue linea que complete el circuito el menor tiempo posible. En este caso, el coche de formula 1 sigue una linea de color rojo y</p>
+
 <h2 id="hardware">Hardware</h2>
+
+<p>En esta practica contamos con un coche de formula 1 con camara para seguir la linea.
+Por lo que el sensor es la camara y los actuadores son los motores del coche de formula 1.</p>
+
+<div style="text-align: center;">
+    <img src="/assets/images/p2/Captura desde 2024-10-11 10-03-10.png" alt="HSV" style="width: 300px" />
+</div>
+
 <h2 id="software">Software</h2>
+
+<h3 id="filtrado-de-color">Filtrado de color</h3>
+
+<div style="text-align: center;">
+    <img src="/assets/images/p2/gyuw4.png" alt="HSV" style="width: 500px" />
+</div>
+
+<h3 id="estrategia-1">Estrategia 1</h3>
+<p>Mi primera estrategia fue coger un bounfing box de la imagen y contar cuántos píxeles rojos hay tanto en la izquierda como en la derecha. La diferencia de ambos sería el error de nuestro sistema.
+Sin embargo, este algoritmo no era preciso ni robusto, ya que no tenía en cuenta por ejemplo en las curvas donde tanto a izquierda como derecha tenía el mismo número de píxeles.</p>
+
+<div style="text-align: center;">
+    <img src="/assets/images/p2/Captura desde 2024-10-11 09-34-36.png" alt="HSV" style="width: 300px" />
+</div>
+
+<p>Como esta solución no era valida, decide incrementar el bounding box, cosa que tampoco resulto. Incluso decidi tomar la imagen entera pero seguia sin funcionar por el mismo problema.</p>
+
+<h3 id="estrategia-2">Estrategia 2</h3>
+
+<p>Mi segunda estrategia</p>
+
+<div style="text-align: center;">
+    <img src="/assets/images/p2/Captura desde 2024-10-10 17-11-46.png" alt="dibujo" style="width: 500px" />
+</div>
 <h2 id="conclusion">Conclusion</h2>
 
   </div><a class="u-url" href="/2024/09/30/p2-follow-line.html" hidden></a>
