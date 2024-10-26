@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-10-26T11:59:14+02:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">MOBILE ROBOTICS PRACTICES</title><entry><title type="html">P3 Obstacle Avoidance</title><link href="http://localhost:4000/2024/10/14/p3-obstacle_avoidance.html" rel="alternate" type="text/html" title="P3 Obstacle Avoidance" /><published>2024-10-14T00:00:00+02:00</published><updated>2024-10-14T00:00:00+02:00</updated><id>http://localhost:4000/2024/10/14/p3-obstacle_avoidance</id><content type="html" xml:base="http://localhost:4000/2024/10/14/p3-obstacle_avoidance.html"><![CDATA[<h2 id="description">Description</h2>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-10-26T12:13:03+02:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">MOBILE ROBOTICS PRACTICES</title><entry><title type="html">P3 Obstacle Avoidance</title><link href="http://localhost:4000/2024/10/14/p3-obstacle_avoidance.html" rel="alternate" type="text/html" title="P3 Obstacle Avoidance" /><published>2024-10-14T00:00:00+02:00</published><updated>2024-10-14T00:00:00+02:00</updated><id>http://localhost:4000/2024/10/14/p3-obstacle_avoidance</id><content type="html" xml:base="http://localhost:4000/2024/10/14/p3-obstacle_avoidance.html"><![CDATA[<h2 id="description">Description</h2>
 
 <p>The aim of this practice is to program a Formula 1 car which can avoid obstacle using Virtual Force Field system. In this case, we are going to develop a local navigating algorthims so that the car can move throw the circuit reaching the waypoints and avoiding the obstacles.</p>
 
@@ -28,6 +28,10 @@
 <p>Increase the weight of small distances measured by the laser, so that when calculating the repulsive vector, these distances have more significance.</p>
 
 <p>The linear velocity depends on the distance calculated as the magnitude of the resulting vector from the weighted average of both forces. This way, at short distances, the speed is reduced to allow for precise evasion.</p>
+
+<p> </p>
+
+<p>Here it is a video with the behavior of the formula 1 car.</p>
 
 <div style="text-align: center;">
     <video width="500" controls="">

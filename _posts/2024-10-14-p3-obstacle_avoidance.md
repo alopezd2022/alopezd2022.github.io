@@ -34,6 +34,10 @@ Reduce the size of the attractive vector, as at very high distances, it exerts t
 Increase the weight of small distances measured by the laser, so that when calculating the repulsive vector, these distances have more significance.
     
 The linear velocity depends on the distance calculated as the magnitude of the resulting vector from the weighted average of both forces. This way, at short distances, the speed is reduced to allow for precise evasion.
+
+&nbsp;
+
+Here it is a video with the behavior of the formula 1 car.
     
 <div style="text-align: center;">
     <video width="500" controls>
