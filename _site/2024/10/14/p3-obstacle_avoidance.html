@@ -52,7 +52,7 @@
 <p>The aim of this practice is to program a Formula 1 car which can avoid obstacle using Virtual Force Field system. In this case, we are going to develop a local navigating algorthims so that the car can move throw the circuit reaching the waypoints and avoiding the obstacles.</p>
 
 <div style="text-align: center;">
-    <img src="/assets/images/p3/Captura desde 2024-10-14 10-40-43.png" alt="car" style="width: 300px" />
+    <img src="/assets/images/p3/Captura desde 2024-10-26 11-51-02.png" alt="car" style="width: 300px" />
 </div>
 
 <h2 id="hardware">Hardware</h2>
@@ -70,7 +70,21 @@
 
 <p>The resulting force should be the weighted average of both the attractive and repulsive vectors. Depending on the factors we assign to each, one vector will have more weight than the other. In this case, I found it more convenient to give greater weight to the repulsive vector so that it prioritizes avoiding obstacles.</p>
 
-<h2 id="conclusion">Conclusion</h2>
+<h4 id="strategies-to-highlight">Strategies to highlight</h4>
+
+<p>Reduce the size of the attractive vector, as at very high distances, it exerts too much force.</p>
+
+<p>Increase the weight of small distances measured by the laser, so that when calculating the repulsive vector, these distances have more significance.</p>
+
+<p>The linear velocity depends on the distance calculated as the magnitude of the resulting vector from the weighted average of both forces. This way, at short distances, the speed is reduced to allow for precise evasion.</p>
+
+<div style="text-align: center;">
+    <video width="500" controls="">
+      <source src="/assets/videos/p3/cochevueltacompleta.webm" type="video/webm" />
+      Tu navegador no soporta la reproducción de videos.
+    </video>
+
+</div>
 
   </div><a class="u-url" href="/2024/10/14/p3-obstacle_avoidance.html" hidden></a>
 </article>
