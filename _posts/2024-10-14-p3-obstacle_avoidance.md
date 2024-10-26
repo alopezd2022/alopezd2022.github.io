@@ -8,7 +8,7 @@ title:  "P3 Obstacle Avoidance"
 The aim of this practice is to program a Formula 1 car which can avoid obstacle using Virtual Force Field system. In this case, we are going to develop a local navigating algorthims so that the car can move throw the circuit reaching the waypoints and avoiding the obstacles.
 
 <div style="text-align: center;">
-    <img src="/assets/images/p3/Captura desde 2024-10-26 11-51-02.png" alt="car" style= "width: 300px">
+    <img src="/assets/images/p3/coche.png" alt="car" style= "width: 300px">
 </div>
 
 ## Hardware
