@@ -1,9 +1,52 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-10-26T12:13:03+02:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">MOBILE ROBOTICS PRACTICES</title><entry><title type="html">P3 Obstacle Avoidance</title><link href="http://localhost:4000/2024/10/14/p3-obstacle_avoidance.html" rel="alternate" type="text/html" title="P3 Obstacle Avoidance" /><published>2024-10-14T00:00:00+02:00</published><updated>2024-10-14T00:00:00+02:00</updated><id>http://localhost:4000/2024/10/14/p3-obstacle_avoidance</id><content type="html" xml:base="http://localhost:4000/2024/10/14/p3-obstacle_avoidance.html"><![CDATA[<h2 id="description">Description</h2>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-11-18T19:14:40+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">MOBILE ROBOTICS PRACTICES</title><entry><title type="html">P4 Global Navigation</title><link href="http://localhost:4000/2024/10/28/p4-global-navigation.html" rel="alternate" type="text/html" title="P4 Global Navigation" /><published>2024-10-28T00:00:00+01:00</published><updated>2024-10-28T00:00:00+01:00</updated><id>http://localhost:4000/2024/10/28/p4-global-navigation</id><content type="html" xml:base="http://localhost:4000/2024/10/28/p4-global-navigation.html"><![CDATA[<h2 id="description">Description</h2>
+
+<p>The objective of this practice is to develop a global navigation algorithm. The user marks a point on the map, and the car must reach it by the shortest path.</p>
+
+<h2 id="hardware">Hardware</h2>
+
+<p>We only have a car without any sensors. The only information we have is its current position.</p>
+
+<h2 id="software">Software</h2>
+
+<h3 id="wave-front-algorthim">Wave Front Algorthim</h3>
+<p>For the car’s navigation, we developed a search algorithm based on the Wave Front Algorithm. This approach generates a cost map by expanding from the final target, assigned a cost of 0, to the car, which receives a cost of <em>n</em>.</p>
+
+<p>To create the cost map, successors of each point are assigned a value equal to <em>cost + 1</em>, while diagonal successors are assigned a value of <em>cost + 1.41</em> (representing the Euclidean distance).</p>
+
+<div style="text-align: center;">
+    <img src="/assets/images/p4/Captura desde 2024-11-18 19-01-14.png" alt="car" style="width: 300px" />
+</div>
+
+<p>Additionally, obstacles and positions near them are assigned an extra cost to ensure that these points are avoided during navigation.</p>
+
+<h3 id="gradient-algorthim">Gradient algorthim</h3>
+
+<p>Once the cost map is generated, we implement a gradient-based navigation algorithm. It works using potential fields: obstacles act as “potential walls” that the robot avoids, while the target serves as a “potential well” that attracts it. By combining these walls and wells, a downward slope path is created, and the robot simply follows it to reach its destination.</p>
+
+<p> </p>
+
+<h3 id="videos">Videos</h3>
+
+<div style="text-align: center;">
+    <video width="500" controls="">
+      <source src="/assets/videos/p4/grabacion-de-pantalla-desde-2024-11-18-10-37-27_hUPDu7c6.webm" type="video/webm" />
+      Tu navegador no soporta la reproducción de videos.
+    </video>
+
+&nbsp;
+
+<div style="text-align: center;">
+    <video width="500" controls="">
+      <source src="/assets/videos/p4/grabacion-de-pantalla-desde-2024-11-18-10-44-35_0AQSLjZU.webm" type="video/webm" />
+      Tu navegador no soporta la reproducción de videos.
+    </video>
+
+</div></div>]]></content><author><name></name></author><summary type="html"><![CDATA[Description]]></summary></entry><entry><title type="html">P3 Obstacle Avoidance</title><link href="http://localhost:4000/2024/10/14/p3-obstacle_avoidance.html" rel="alternate" type="text/html" title="P3 Obstacle Avoidance" /><published>2024-10-14T00:00:00+02:00</published><updated>2024-10-14T00:00:00+02:00</updated><id>http://localhost:4000/2024/10/14/p3-obstacle_avoidance</id><content type="html" xml:base="http://localhost:4000/2024/10/14/p3-obstacle_avoidance.html"><![CDATA[<h2 id="description">Description</h2>
 
 <p>The aim of this practice is to program a Formula 1 car which can avoid obstacle using Virtual Force Field system. In this case, we are going to develop a local navigating algorthims so that the car can move throw the circuit reaching the waypoints and avoiding the obstacles.</p>
 
 <div style="text-align: center;">
-    <img src="/assets/images/p3/Captura desde 2024-10-26 11-51-02.png" alt="car" style="width: 300px" />
+    <img src="/assets/images/p3/coche.png" alt="car" style="width: 300px" />
 </div>
 
 <h2 id="hardware">Hardware</h2>
