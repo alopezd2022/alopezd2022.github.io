@@ -18,10 +18,14 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: MOBILE ROBOTICS PRACTICES
+title: PRACTICES
 email: a.lopezd.2022@alumnos.urjc.es
 github_username:  alopezd2022
-baseurl: ""
+nav:
+  - title: Robótica Móvil
+    url: /robotica-movil/
+  - title: Sistemas Empotrados y de Tiempo Real
+    url: /sistemas-empotrados-tiempo-real/
 # Build settings
 theme: minima
 plugins:

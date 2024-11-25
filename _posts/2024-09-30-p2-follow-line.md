@@ -1,6 +1,7 @@
 ---
 layout: post
 title:  "P2 Follow Line"
+tags: [robotica-movil]
 ---
 
 ## Description
