@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-11-25T09:45:13+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">PRACTICES</title><entry><title type="html">P4 Global Navigation</title><link href="http://localhost:4000/2024/10/28/p4-global-navigation.html" rel="alternate" type="text/html" title="P4 Global Navigation" /><published>2024-10-28T00:00:00+01:00</published><updated>2024-10-28T00:00:00+01:00</updated><id>http://localhost:4000/2024/10/28/p4-global-navigation</id><content type="html" xml:base="http://localhost:4000/2024/10/28/p4-global-navigation.html"><![CDATA[<h2 id="description">Description</h2>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-11-26T11:53:08+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">PRACTICES</title><entry><title type="html">P4 Global Navigation</title><link href="http://localhost:4000/2024/10/28/p4-global-navigation.html" rel="alternate" type="text/html" title="P4 Global Navigation" /><published>2024-10-28T00:00:00+01:00</published><updated>2024-10-28T00:00:00+01:00</updated><id>http://localhost:4000/2024/10/28/p4-global-navigation</id><content type="html" xml:base="http://localhost:4000/2024/10/28/p4-global-navigation.html"><![CDATA[<h2 id="description">Description</h2>
 
 <p>The objective of this practice is to develop a global navigation algorithm. The user marks a point on the map, and the car must reach it by the shortest path.</p>
 
@@ -18,6 +18,12 @@
 </div>
 
 <p>Additionally, obstacles and positions near them are assigned an extra cost to ensure that these points are avoided during navigation.</p>
+
+<p>Once the search and the filling of the cost grid are completed, we display the map based on the cost grid. However, since the costs exceed 255 (the maximum white color), we need to normalize it so that it is displayed in a range from 0 to 255 based on the highest cost.</p>
+
+<div style="text-align: center;">
+    <img src="/assets/images/p4/Captura desde 2024-11-26 11-44-16.png" alt="car" style="width: 300px" />
+</div>
 
 <h3 id="gradient-algorthim">Gradient algorthim</h3>
 
