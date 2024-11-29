@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "P3 Obstacle Avoidance"
-tags: [robotica-movil]
+tags: [mobile-robotics]
 ---
 
 ## Description

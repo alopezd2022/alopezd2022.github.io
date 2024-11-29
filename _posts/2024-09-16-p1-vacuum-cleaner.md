@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "P1 Vacuum Cleaner"
-tags: [robotica-movil]
+tags: [mobile-robotics]
 ---
 
 

@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "P4 Global Navigation"
-tags: [robotica-movil]
+tags: [mobile-robotics]
 ---
 
 ## Description

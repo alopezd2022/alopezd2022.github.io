@@ -22,10 +22,10 @@ title: PRACTICES
 email: a.lopezd.2022@alumnos.urjc.es
 github_username:  alopezd2022
 nav:
-  - title: Robótica Móvil
-    url: /robotica-movil/
-  - title: Sistemas Empotrados y de Tiempo Real
-    url: /sistemas-empotrados-tiempo-real/
+  - title: Mobile Robotics
+    url: /mobile-robotics/
+  - title: Embedded and real-time systems
+    url: /embedded-and-real-time-systems/
 # Build settings
 theme: minima
 plugins:
