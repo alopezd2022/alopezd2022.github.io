@@ -1,4 +1,213 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-11-29T09:58:14+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">PRACTICES</title><entry><title type="html">P3 Vending machine</title><link href="http://localhost:4000/2024/11/18/p3-maquina-expendedora.html" rel="alternate" type="text/html" title="P3 Vending machine" /><published>2024-11-18T00:00:00+01:00</published><updated>2024-11-18T00:00:00+01:00</updated><id>http://localhost:4000/2024/11/18/p3-maquina-expendedora</id><content type="html" xml:base="http://localhost:4000/2024/11/18/p3-maquina-expendedora.html"><![CDATA[]]></content><author><name></name></author><category term="embedded-and-real-time-systems" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">P4 Global Navigation</title><link href="http://localhost:4000/2024/10/28/p4-global-navigation.html" rel="alternate" type="text/html" title="P4 Global Navigation" /><published>2024-10-28T00:00:00+01:00</published><updated>2024-10-28T00:00:00+01:00</updated><id>http://localhost:4000/2024/10/28/p4-global-navigation</id><content type="html" xml:base="http://localhost:4000/2024/10/28/p4-global-navigation.html"><![CDATA[<h2 id="description">Description</h2>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-11-30T16:20:27+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">PRACTICES</title><entry><title type="html">P3 Vending machine</title><link href="http://localhost:4000/2024/11/18/p3-maquina-expendedora.html" rel="alternate" type="text/html" title="P3 Vending machine" /><published>2024-11-18T00:00:00+01:00</published><updated>2024-11-18T00:00:00+01:00</updated><id>http://localhost:4000/2024/11/18/p3-maquina-expendedora</id><content type="html" xml:base="http://localhost:4000/2024/11/18/p3-maquina-expendedora.html"><![CDATA[<h2 id="description">Description</h2>
+<p>La practica consiste en diseñar un controlador para una maquina expendedora que este basado en Arduino Uno. Para diseñar este controlador haremos uso de Arduino Threads, interrupciones, watchdog…</p>
+
+<h2 id="hardware">Hardware</h2>
+
+<p align="center">
+  <img src="/assets/images/p3-empotrados/arduino.jpeg" alt="Arduino UNO" width="200" />
+  <img src="/assets/images/p3-empotrados/lcd.webp" alt="LCD" width="200" />
+  <img src="/assets/images/p3-empotrados/joystick.jpg" alt="Joystick" width="200" />
+</p>
+<p align="center">
+  <b>Arduino UNO</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <b>LCD</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <b>Joystick</b>
+</p>
+
+<p align="center">
+  <img src="/assets/images/p3-empotrados/dht11.jpeg" alt="Sensor DHT-11" width="200" />
+  <img src="/assets/images/p3-empotrados/Hc-sr04.jpg" alt="Sensor HC-SR04" width="200" />
+  <img src="/assets/images/p3-empotrados/boton.jpeg" alt="Botón" width="200" />
+</p>
+<p align="center">
+  <b>Sensor DHT-11</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <b>HC-SR04</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <b>Botón</b>
+</p>
+
+<p align="center">
+  <img src="/assets/images/p3-empotrados/leds.jpg" alt="LED Rojo" width="200" />
+</p>
+<p align="center">
+  <b>LEDs</b> 
+</p>
+
+<p> </p>
+
+<p>A partir de todos estos componentes obtenemos el siguiente esquema electrónico.</p>
+
+<p align="center">
+  <img src="/assets/images/p3-empotrados/Maquina_expendedora_bb.jpg" width="500" />
+</p>
+
+<h2 id="software">Software</h2>
+
+<h3 id="clases">Clases</h3>
+<h4 id="boot">Boot</h4>
+
+<p>La clase boot es la clase encargada del arranque de la maquina expendedora. La clase Boot es una clase derivada de Thread que controla un pin led y una pantalla LCD, por lo tanto se ejecuta como “hilo independiente” que, una vez que acaba la secuencia de arranque, no se vuelve a ejecutar.</p>
+
+<p>Al ejecutar se llama al metodo run la cual va alternando el estado de un pin y además muestra por la pantalla del lcd la cadena “CARGANDO…”.</p>
+
+<p>Cuando el contador ha llegado a 3, se dejada de ejecutar el hilo y se remueve del controlador, ya que no volveremos a ejecutar dicha clase.</p>
+
+<div style="text-align: center;">
+    <video width="500" controls="">
+      <source src="/assets/videos/p3-empotrados/boot.mp4" type="video/webm" />
+      Tu navegador no soporta la reproducción de videos.
+    </video>
+</div>
+
+<p> </p>
+
+<h4 id="sensors">Sensors</h4>
+
+<p>La clase sensor es la clase encargada de la lectura del sensor de humedad y temperatura y humedad. La clase es una clase derivada de Thread, por lo que se ejecuta como “hilo” cada 5 segundos y nunca es removido debido a que siempre queremos tener monitorizado la temperatura y humedad de nuestra maquina para prevenir de posibles desastres.</p>
+
+<p>En ella encontramos la inicialización del sensor, dos métodos que obtienen los valores de temperatura y humedad respectivamente y dos métodos que muestran los valores por el lcd.</p>
+
+<div style="text-align: center;">
+    <video width="500" controls="">
+      <source src="/assets/videos/p3-empotrados/sensors.mp4" type="video/webm" />
+      Tu navegador no soporta la reproducción de videos.
+    </video>
+</div>
+
+<p> </p>
+
+<h4 id="menu">Menu</h4>
+
+<p>La clase Menu es una clase que hereda de Thread y administra un menú de bebidas para una pantalla LCD controlada por un objeto LiquidCrystal. Contiene un arreglo de objetos Item (con nombre y precio), índices para la navegación del menú, y métodos para mostrar el menú en pantalla, cambiar precios y apagar la pantalla. El constructor inicializa el menú con 5 elementos predeterminados y configura el índice inicial en 0.</p>
+
+<p>Los métodos permiten visualizar el elemento actual del menú, actualizar su precio y limpiar la pantalla LCD.</p>
+
+<div style="text-align: center;">
+    <video width="500" controls="">
+      <source src="/assets/videos/p3-empotrados/menu.mp4" type="video/webm" />
+      Tu navegador no soporta la reproducción de videos.
+    </video>
+</div>
+
+<p> </p>
+
+<h4 id="admin">Admin</h4>
+
+<p>La clase Admin hereda de Thread y gestiona un menú administrativo para un dispositivo con pantalla LCD controlada por un objeto LiquidCrystal. Contiene un arreglo de cadenas con 4 opciones de menú y un índice para navegar entre ellas.</p>
+
+<p>Incluye un método para mostrar la opción actual del menú en la pantalla y otro para apagar (limpiar) la pantalla. Proporciona una interfaz simple para administrar funcionalidades como sensores y configuración.</p>
+
+<div style="text-align: center;">
+    <video width="500" controls="">
+      <source src="/assets/videos/p3-empotrados/admin.mp4" type="video/webm" />
+      Tu navegador no soporta la reproducción de videos.
+    </video>
+</div>
+
+<p> </p>
+
+<h3 id="main">Main</h3>
+
+<p>El main esta compuesto principalmente de las funciones :</p>
+
+<ul>
+  <li>
+    <p><strong>setup</strong> en donde se inicializa el lcd, los pines para los leds y para las interrupciones, los intervalos de los threads en el controlador y el watchdog.</p>
+  </li>
+  <li>
+    <p><strong>loop</strong> en donde se encuentra una maquina de estados finita.</p>
+  </li>
+</ul>
+
+<p> </p>
+
+<p align="center">
+  <img src="/assets/images/p3-empotrados/state-machine.jpg" width="500" />
+</p>
+
+<p> </p>
+
+<p>Como principales estados tenemos:</p>
+
+<ul>
+  <li>
+    <p><strong>BOOT</strong>, estado que obtiene el contador de la clase BOOT y si ha llegado a 3 termina y transita al estado WAITING_CLIENT</p>
+  </li>
+  <li>
+    <p><strong>WAITING_CLIENT</strong>, estado en el que el sensor de ultrasonidos recoge los valores de la distancia, en cuando hay un cliente a menos de un metro transita al estado IS_CLIENT</p>
+  </li>
+  <li>
+    <p><strong>IS_CLIENT</strong>, estado que muestra durante 5 segundos la temperatura y humedad y transita al estado SHOW_MENU.</p>
+  </li>
+  <li>
+    <p><strong>SHOW_MENU</strong>, estado que muestra el menú usando el método “showMenu” de la clase Menu, solo transita unicamente con la interrupción del botón del joystick.</p>
+  </li>
+  <li>
+    <p><strong>PREPARE_PRODUCT</strong>, estado que simula la preparación del producto, en el se enciende progresivamente un led y muestra un mensaje por el lcd durnate un tiempo ramdon. Una vez finalizado muestra por el lcd que el producto esta listo y transita al estado WAITING_CLIENT.</p>
+  </li>
+</ul>
+
+<div style="text-align: center;">
+    <video width="500" controls="">
+      <source src="/assets/videos/p3-empotrados/prepare-product.mp4" type="video/webm" />
+      Tu navegador no soporta la reproducción de videos.
+    </video>
+</div>
+
+<p> </p>
+
+<p>En cualquier momento si queremos reiniciar y volver al estado WAITING_CLIENT se debe pulsar el botón en un rango de entre 2 y 3 segundos.</p>
+
+<p>Con estos 5 estados tenemos el comportamiento a nivel de usuario de la maquina expendedora. Sin embargo, hay más comportamientos a nivel de administrados. Para transitar al estado de administrador se debe pulsar el botón durante 5 segundos.</p>
+
+<ul>
+  <li>
+    <p><strong>ADMIN</strong>, estado que muestra el menú del administrados con las diferentes funcionalidades. Cada una se muestra como un sub-estado:</p>
+
+    <ul>
+      <li>
+        <p><strong>SEE_TEMPERATURE</strong>, estado que muestra la temperatura y la humedad.</p>
+      </li>
+      <li>
+        <p><strong>SEE_DISTANCE</strong>, estado que muestra los valores del sensor de ultrasonidos</p>
+      </li>
+      <li>
+        <p><strong>COUNTER</strong>, estado que muestra el tiempo desde que se inicio.</p>
+      </li>
+      <li>
+        <p><strong>CHANGE_PRICE</strong>, estado que cambia el precio de un producto, el cual tiene el sub-estado <strong>ASIGN_PRICE</strong> al cual solo transita unicamente con la interrupción del boton del joystick.</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p>Para transitar por los diferentes sub-estados al estado ADMIN unicamente se puede hacer mediante un movimiento del joystick en el eje X a la izquierda, una acción para “volver al menú”</p>
+
+<p> </p>
+
+<h4 id="watchdog">Watchdog</h4>
+
+<p>Implementamos el watchdog como mecamismo de seguridad por si el sistema se queda bloqueado y no tiene el comportamiento deseado con un timer de 8 segundos.</p>
+
+<p>Podemos observar su correcto funcionamiento ya que en el estado PREPARE_PRODUCT simulamos la preparación del producto con un delay random entre 4 y 8 segundos. Si no se resetea el watchdog, este va a reiniciar el sistema cuando el random de valor 8. En el siguiente video se puede observar lo comentado anteriormente.</p>
+
+<div style="text-align: center;">
+    <video width="500" controls="">
+      <source src="/assets/videos/p3-empotrados/watchdog.mp4" type="video/webm" />
+      Tu navegador no soporta la reproducción de videos.
+    </video>
+</div>
+<p> </p>
+
+<h3 id="final-video">Final video</h3>
+
+<p>Video final con el comportamiento completo de la Maquina expendedora.</p>
+
+<div style="text-align: center;">
+    <video width="500" controls="">
+      <source src="/assets/videos/p3-empotrados/complete-video.mp4" type="video/webm" />
+      Tu navegador no soporta la reproducción de videos.
+    </video>
+</div>]]></content><author><name></name></author><category term="embedded-and-real-time-systems" /><summary type="html"><![CDATA[Description La practica consiste en diseñar un controlador para una maquina expendedora que este basado en Arduino Uno. Para diseñar este controlador haremos uso de Arduino Threads, interrupciones, watchdog…]]></summary></entry><entry><title type="html">P4 Global Navigation</title><link href="http://localhost:4000/2024/10/28/p4-global-navigation.html" rel="alternate" type="text/html" title="P4 Global Navigation" /><published>2024-10-28T00:00:00+01:00</published><updated>2024-10-28T00:00:00+01:00</updated><id>http://localhost:4000/2024/10/28/p4-global-navigation</id><content type="html" xml:base="http://localhost:4000/2024/10/28/p4-global-navigation.html"><![CDATA[<h2 id="description">Description</h2>
 
 <p>The objective of this practice is to develop a global navigation algorithm. The user marks a point on the map, and the car must reach it by the shortest path.</p>
 
