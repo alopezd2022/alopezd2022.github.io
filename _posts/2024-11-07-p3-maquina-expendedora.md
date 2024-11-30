@@ -192,4 +192,9 @@ Video final con el comportamiento completo de la Maquina expendedora.
     </video>
 </div>
 
+&nbsp;
+
+## Conclusion
+
+En conclusión, he obtado por esta implementación ya que el uso de **clases** nos facilita la posible implementación en otros proyectos, además de brindar mayor escalabilidad y modularidad a nuestro sistema, lo que permite un mantenimiento y actualización más eficientes. Por otro lado, el uso de **threads** nos permite ejecutar tareas en distintos periodos de tiempo sin necesidad de utilizar **delays**, mejorando significativamente la funcionalidad y la respuesta de nuestro **sketch**. Asi mismo, la implementación de **interrupciones** resulta fundamental para manejar eventos críticos en tiempo real, ya que estas permiten responder de manera inmediata a señales como los botones sin la necesidad de sondear constantemente, optimizando así el rendimiento del sistema y garantizando una mayor eficiencia.
 
