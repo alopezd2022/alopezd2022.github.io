@@ -1,4 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-11-30T17:01:07+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">PRACTICES</title><entry><title type="html">P3 Vending machine</title><link href="http://localhost:4000/2024/11/07/p3-maquina-expendedora.html" rel="alternate" type="text/html" title="P3 Vending machine" /><published>2024-11-07T00:00:00+01:00</published><updated>2024-11-07T00:00:00+01:00</updated><id>http://localhost:4000/2024/11/07/p3-maquina-expendedora</id><content type="html" xml:base="http://localhost:4000/2024/11/07/p3-maquina-expendedora.html"><![CDATA[<h2 id="description">Description</h2>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-12-19T09:34:38+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">PRACTICES</title><entry><title type="html">P4 Follow Line</title><link href="http://localhost:4000/2024/12/03/p4-follow-line.html" rel="alternate" type="text/html" title="P4 Follow Line" /><published>2024-12-03T00:00:00+01:00</published><updated>2024-12-03T00:00:00+01:00</updated><id>http://localhost:4000/2024/12/03/p4-follow-line</id><content type="html" xml:base="http://localhost:4000/2024/12/03/p4-follow-line.html"><![CDATA[<h2 id="descripción">Descripción</h2>
+
+<h2 id="hardware">Hardware</h2>
+
+<h2 id="software">Software</h2>
+
+<h3 id="comunicación">Comunicación</h3>
+<h4 id="serie">Serie</h4>
+<h4 id="mqtt">MQTT</h4>
+
+<h3 id="pid">PID</h3>
+
+<h2 id="video">Video</h2>]]></content><author><name></name></author><category term="embedded-and-real-time-systems" /><summary type="html"><![CDATA[Descripción]]></summary></entry><entry><title type="html">P3 Vending machine</title><link href="http://localhost:4000/2024/11/07/p3-maquina-expendedora.html" rel="alternate" type="text/html" title="P3 Vending machine" /><published>2024-11-07T00:00:00+01:00</published><updated>2024-11-07T00:00:00+01:00</updated><id>http://localhost:4000/2024/11/07/p3-maquina-expendedora</id><content type="html" xml:base="http://localhost:4000/2024/11/07/p3-maquina-expendedora.html"><![CDATA[<h2 id="description">Description</h2>
 <p>La practica consiste en diseñar un controlador para una maquina expendedora que este basado en Arduino Uno. Para diseñar este controlador haremos uso de Arduino Threads, interrupciones, watchdog…</p>
 
 <h2 id="hardware">Hardware</h2>
