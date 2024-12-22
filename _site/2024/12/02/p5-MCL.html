@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>P5 Monte Carlo Laser Localization | PRACTICES</title>
+<meta name="generator" content="Jekyll v4.3.4" />
+<meta property="og:title" content="P5 Monte Carlo Laser Localization" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Description" />
+<meta property="og:description" content="Description" />
+<link rel="canonical" href="http://localhost:4000/2024/12/02/p5-MCL.html" />
+<meta property="og:url" content="http://localhost:4000/2024/12/02/p5-MCL.html" />
+<meta property="og:site_name" content="PRACTICES" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-12-02T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="P5 Monte Carlo Laser Localization" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2024-12-02T00:00:00+01:00","datePublished":"2024-12-02T00:00:00+01:00","description":"Description","headline":"P5 Monte Carlo Laser Localization","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2024/12/02/p5-MCL.html"},"url":"http://localhost:4000/2024/12/02/p5-MCL.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="PRACTICES" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">PRACTICES</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a><a class="page-link" href="/mobile-robotics/">Mobile Robotics</a><a class="page-link" href="/embedded-and-real-time-systems/">Embedded and real-time systems</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">P5 Monte Carlo Laser Localization</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2024-12-02T00:00:00+01:00" itemprop="datePublished">Dec 2, 2024
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h2 id="description">Description</h2>
+
+<p>The objective of this practice is to develop the algorithm of Monte Carlo to localizate the robot.</p>
+
+<h2 id="monte-carlo-algorithm">Monte Carlo Algorithm</h2>
+
+<h4 id="initialize">Initialize</h4>
+<div style="display: flex; align-items: center;">
+    <img src="/assets/videos/p5/inicializar.gif" alt="GIF divertido" width="400" />
+    <div style="margin-left: 20px; text-align: right;">
+        <p>
+            The particles are initialized with a uniform random distribution with a noise:
+            <br />
+            <strong>INIT_XY_STD = 0.5</strong> <br />
+            <strong>INIT_ANGLE_STD = 0.1</strong>
+        </p>
+    </div>
+</div>
+
+<p> </p>
+
+<h4 id="step-1-propagation-motion-update">Step 1 Propagation (motion update)</h4>
+<div style="display: flex; align-items: center;">
+    <img src="/assets/videos/p5/propagacion.gif" alt="GIF divertido" width="400" />
+    <div style="margin-left: 20px; text-align: right;">
+        <p>
+            The pose of particles move according to the movement of the robot with a little noise:
+            <br />
+            <strong>PROPAGATION_XY_NOISE_STD = 0.05</strong> <br />
+            <strong>PROPAGATION_ANGLE_NOISE_STD = 0.01</strong>
+        </p>
+    </div>
+</div>
+
+<p> </p>
+
+<h4 id="step-2-sensor-update-weight-estimation">Step 2 Sensor update (weight estimation)</h4>
+
+<p>Following the Probabilistic Sensor Observation Model, the particles are assigned a weight depending on the difference between the laser sensor reading from the robot and a theoretical laser developed for each particle and each iteration.</p>
+
+<p>The calculation of the probabilities is given by the following formula :</p>
+
+<p><img src="/assets/images/p5/formula.png" alt="GIF divertido" width="400" /></p>
+
+<p>Where the error represents the discrepancy between the actual sensor readings and the theoretical predictions for each particle, calculated based on their position and orientation in the map</p>
+
+<p>The weights are normalized to ensure they form a probability distribution, making it easier to compare and interpret the likelihood of each particle accurately.</p>
+
+<h4 id="step-3-resampling">Step 3 Resampling</h4>
+
+<p>Select and give more importance to the most relevant particles, those which have more probability. Eliminating the irrelevant particles and duplicating the relevant ones</p>
+
+<p> </p>
+
+<h3 id="solution">Solution</h3>
+<p>The most significant problem was the convergence of the particles, not because the algorithm wasn’t accurate, but because the computation time was very high, which did not allow for fast processing. Therefore, we can observe an initial solution without parallel processing and a final solution implementing parallel processing.</p>
+
+<h4 id="result-without-multiprocessing">Result without multiprocessing</h4>
+
+<div style="display: flex; align-items: center;">
+    <video width="500" controls="">
+      <source src="/assets/videos/p5/sin_multi_video.mp4" type="video/webm" />
+      Tu navegador no soporta la reproducción de videos.
+    </video>
+    <div style="margin-left: 20px; text-align: right;">
+        <p>
+            As we can see in the video, the computation time is quite high. This prevents the algorithm from fully converging, as it requires fast processing. Using fewer        particles and fewer virtual ray traces reduces the computation time, but it is still not enough.
+            <br />
+            <strong>N_PARTICLES = 500</strong> <br />
+            <strong>LASER_NUM_BEAMS = 3</strong>
+        </p>
+    </div>
+</div>
+
+<p> </p>
+
+<h4 id="result-with-multiprocessing">Result with multiprocessing</h4>
+
+<div style="display: flex; align-items: center;">
+    <video width="500" controls="">
+      <source src="/assets/videos/p5/multiprocesing_video.mp4" type="video/webm" />
+      Tu navegador no soporta la reproducción de videos.
+    </video>
+    <div style="margin-left: 20px; text-align: right;">
+        <p>
+            By the other side, using multiprocessing to execute the virtuals ray traces parallel show that the computation time reduce significantly. So we can increase the number of virtual ray traces.
+            <br />
+            <strong>N_PARTICLES = 500</strong> <br />
+            <strong>LASER_NUM_BEAMS = 5</strong>
+        </p>
+    </div>
+</div>
+
+  </div><a class="u-url" href="/2024/12/02/p5-MCL.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">PRACTICES</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">PRACTICES</li><li><a class="u-email" href="mailto:a.lopezd.2022@alumnos.urjc.es">a.lopezd.2022@alumnos.urjc.es</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/alopezd2022"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">alopezd2022</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p></p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-12-19T09:34:38+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">PRACTICES</title><entry><title type="html">P4 Follow Line</title><link href="http://localhost:4000/2024/12/03/p4-follow-line.html" rel="alternate" type="text/html" title="P4 Follow Line" /><published>2024-12-03T00:00:00+01:00</published><updated>2024-12-03T00:00:00+01:00</updated><id>http://localhost:4000/2024/12/03/p4-follow-line</id><content type="html" xml:base="http://localhost:4000/2024/12/03/p4-follow-line.html"><![CDATA[<h2 id="descripción">Descripción</h2>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-12-22T18:34:54+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">PRACTICES</title><entry><title type="html">P4 Follow Line</title><link href="http://localhost:4000/2024/12/03/p4-follow-line.html" rel="alternate" type="text/html" title="P4 Follow Line" /><published>2024-12-03T00:00:00+01:00</published><updated>2024-12-03T00:00:00+01:00</updated><id>http://localhost:4000/2024/12/03/p4-follow-line</id><content type="html" xml:base="http://localhost:4000/2024/12/03/p4-follow-line.html"><![CDATA[<h2 id="descripción">Descripción</h2>
 
 <h2 id="hardware">Hardware</h2>
 
@@ -10,7 +10,98 @@
 
 <h3 id="pid">PID</h3>
 
-<h2 id="video">Video</h2>]]></content><author><name></name></author><category term="embedded-and-real-time-systems" /><summary type="html"><![CDATA[Descripción]]></summary></entry><entry><title type="html">P3 Vending machine</title><link href="http://localhost:4000/2024/11/07/p3-maquina-expendedora.html" rel="alternate" type="text/html" title="P3 Vending machine" /><published>2024-11-07T00:00:00+01:00</published><updated>2024-11-07T00:00:00+01:00</updated><id>http://localhost:4000/2024/11/07/p3-maquina-expendedora</id><content type="html" xml:base="http://localhost:4000/2024/11/07/p3-maquina-expendedora.html"><![CDATA[<h2 id="description">Description</h2>
+<h2 id="video">Video</h2>]]></content><author><name></name></author><category term="embedded-and-real-time-systems" /><summary type="html"><![CDATA[Descripción]]></summary></entry><entry><title type="html">P5 Monte Carlo Laser Localization</title><link href="http://localhost:4000/2024/12/02/p5-MCL.html" rel="alternate" type="text/html" title="P5 Monte Carlo Laser Localization" /><published>2024-12-02T00:00:00+01:00</published><updated>2024-12-02T00:00:00+01:00</updated><id>http://localhost:4000/2024/12/02/p5-MCL</id><content type="html" xml:base="http://localhost:4000/2024/12/02/p5-MCL.html"><![CDATA[<h2 id="description">Description</h2>
+
+<p>The objective of this practice is to develop the algorithm of Monte Carlo to localizate the robot.</p>
+
+<h2 id="monte-carlo-algorithm">Monte Carlo Algorithm</h2>
+
+<h4 id="initialize">Initialize</h4>
+<div style="display: flex; align-items: center;">
+    <img src="/assets/videos/p5/inicializar.gif" alt="GIF divertido" width="400" />
+    <div style="margin-left: 20px; text-align: right;">
+        <p>
+            The particles are initialized with a uniform random distribution with a noise:
+            <br />
+            <strong>INIT_XY_STD = 0.5</strong> <br />
+            <strong>INIT_ANGLE_STD = 0.1</strong>
+        </p>
+    </div>
+</div>
+
+<p> </p>
+
+<h4 id="step-1-propagation-motion-update">Step 1 Propagation (motion update)</h4>
+<div style="display: flex; align-items: center;">
+    <img src="/assets/videos/p5/propagacion.gif" alt="GIF divertido" width="400" />
+    <div style="margin-left: 20px; text-align: right;">
+        <p>
+            The pose of particles move according to the movement of the robot with a little noise:
+            <br />
+            <strong>PROPAGATION_XY_NOISE_STD = 0.05</strong> <br />
+            <strong>PROPAGATION_ANGLE_NOISE_STD = 0.01</strong>
+        </p>
+    </div>
+</div>
+
+<p> </p>
+
+<h4 id="step-2-sensor-update-weight-estimation">Step 2 Sensor update (weight estimation)</h4>
+
+<p>Following the Probabilistic Sensor Observation Model, the particles are assigned a weight depending on the difference between the laser sensor reading from the robot and a theoretical laser developed for each particle and each iteration.</p>
+
+<p>The calculation of the probabilities is given by the following formula :</p>
+
+<p><img src="/assets/images/p5/formula.png" alt="GIF divertido" width="400" /></p>
+
+<p>Where the error represents the discrepancy between the actual sensor readings and the theoretical predictions for each particle, calculated based on their position and orientation in the map</p>
+
+<p>The weights are normalized to ensure they form a probability distribution, making it easier to compare and interpret the likelihood of each particle accurately.</p>
+
+<h4 id="step-3-resampling">Step 3 Resampling</h4>
+
+<p>Select and give more importance to the most relevant particles, those which have more probability. Eliminating the irrelevant particles and duplicating the relevant ones</p>
+
+<p> </p>
+
+<h3 id="solution">Solution</h3>
+<p>The most significant problem was the convergence of the particles, not because the algorithm wasn’t accurate, but because the computation time was very high, which did not allow for fast processing. Therefore, we can observe an initial solution without parallel processing and a final solution implementing parallel processing.</p>
+
+<h4 id="result-without-multiprocessing">Result without multiprocessing</h4>
+
+<div style="display: flex; align-items: center;">
+    <video width="500" controls="">
+      <source src="/assets/videos/p5/sin_multi_video.mp4" type="video/webm" />
+      Tu navegador no soporta la reproducción de videos.
+    </video>
+    <div style="margin-left: 20px; text-align: right;">
+        <p>
+            As we can see in the video, the computation time is quite high. This prevents the algorithm from fully converging, as it requires fast processing. Using fewer        particles and fewer virtual ray traces reduces the computation time, but it is still not enough.
+            <br />
+            <strong>N_PARTICLES = 500</strong> <br />
+            <strong>LASER_NUM_BEAMS = 3</strong>
+        </p>
+    </div>
+</div>
+
+<p> </p>
+
+<h4 id="result-with-multiprocessing">Result with multiprocessing</h4>
+
+<div style="display: flex; align-items: center;">
+    <video width="500" controls="">
+      <source src="/assets/videos/p5/multiprocesing_video.mp4" type="video/webm" />
+      Tu navegador no soporta la reproducción de videos.
+    </video>
+    <div style="margin-left: 20px; text-align: right;">
+        <p>
+            By the other side, using multiprocessing to execute the virtuals ray traces parallel show that the computation time reduce significantly. So we can increase the number of virtual ray traces.
+            <br />
+            <strong>N_PARTICLES = 500</strong> <br />
+            <strong>LASER_NUM_BEAMS = 5</strong>
+        </p>
+    </div>
+</div>]]></content><author><name></name></author><category term="mobile-robotics" /><summary type="html"><![CDATA[Description]]></summary></entry><entry><title type="html">P3 Vending machine</title><link href="http://localhost:4000/2024/11/07/p3-maquina-expendedora.html" rel="alternate" type="text/html" title="P3 Vending machine" /><published>2024-11-07T00:00:00+01:00</published><updated>2024-11-07T00:00:00+01:00</updated><id>http://localhost:4000/2024/11/07/p3-maquina-expendedora</id><content type="html" xml:base="http://localhost:4000/2024/11/07/p3-maquina-expendedora.html"><![CDATA[<h2 id="description">Description</h2>
 <p>La practica consiste en diseñar un controlador para una maquina expendedora que este basado en Arduino Uno. Para diseñar este controlador haremos uso de Arduino Threads, interrupciones, watchdog…</p>
 
 <h2 id="hardware">Hardware</h2>
