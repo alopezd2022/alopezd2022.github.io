@@ -7,8 +7,8 @@
 <meta name="generator" content="Jekyll v4.3.4" />
 <meta property="og:title" content="P4 Follow Line" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="Descripción" />
-<meta property="og:description" content="Descripción" />
+<meta name="description" content="RUST-EZE Descripción" />
+<meta property="og:description" content="RUST-EZE Descripción" />
 <link rel="canonical" href="http://localhost:4000/2024/12/03/p4-follow-line.html" />
 <meta property="og:url" content="http://localhost:4000/2024/12/03/p4-follow-line.html" />
 <meta property="og:site_name" content="PRACTICES" />
@@ -17,7 +17,7 @@
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="P4 Follow Line" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2024-12-03T00:00:00+01:00","datePublished":"2024-12-03T00:00:00+01:00","description":"Descripción","headline":"P4 Follow Line","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2024/12/03/p4-follow-line.html"},"url":"http://localhost:4000/2024/12/03/p4-follow-line.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2024-12-03T00:00:00+01:00","datePublished":"2024-12-03T00:00:00+01:00","description":"RUST-EZE Descripción","headline":"P4 Follow Line","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2024/12/03/p4-follow-line.html"},"url":"http://localhost:4000/2024/12/03/p4-follow-line.html"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="PRACTICES" /></head>
 <body><header class="site-header" role="banner">
@@ -47,20 +47,90 @@
   </header>
 
   <div class="post-content e-content" itemprop="articleBody">
-    <h2 id="descripción">Descripción</h2>
+    <h1 id="rust-eze"><b>RUST-EZE</b></h1>
+<h2 id="descripción"><b>Descripción</b></h2>
 
-<h2 id="hardware">Hardware</h2>
+<p>El objetivo de esta practica es diseñar un sigue lineas incorporando comunación IoT, controladores, Arduino Threads…</p>
 
-<h2 id="software">Software</h2>
+<h2 id="hardware"><b>Hardware</b></h2>
 
-<h3 id="comunicación">Comunicación</h3>
-<h4 id="serie">Serie</h4>
-<h4 id="mqtt">MQTT</h4>
+<p>Para este practica se ha usado un Arduino UNO, una ESP32, un sensor de ultrasonidos HC-SR04, un sensor de infrarrojos y los actuadores en cuestión, los motores para las ruedas del coche.</p>
 
-<h3 id="pid">PID</h3>
+<h2 id="software"><b>Software</b></h2>
+
+<p>Para esta practica hemos obstado por continuar con el sistema operativo de Arduino y no implementar FREE-RTOS. Esto se debe a que esta practica no precisa de un manejo estricto de tareas que deban cumplir deadlines. Con el único hilo y flujo de ejecución de Arduino se pueden conseguir los objetivos principales, seguir la linea leyendo en cada iteración el sensor de infrarrojos, enviar a la ESP la información necesaria mediante el puerto serie y verificar el sensor de ultrasonidos en cada iteración para la detección de obstáculos.</p>
+
+<h3 id="-comunicación-"><b> Comunicación </b></h3>
+<h4 id="serie-entre-arduino-y-esp"><b>Serie entre Arduino y ESP</b></h4>
+<p>La comunicación por los puertos serie entre el Arduino y el ESP es una comunicación bidireccional, en la que la ESP inicia la comunicación indicando que se puede iniciar la carrera una vez que se ha conectado al WIFI y al broker MQTT. Cuando la ESP envía el mensaje de inicio, el Arduino inicia un paso de mensajes dependiendo de la acción que realiza el coche. Las acciones pueden ser :</p>
+<ul>
+  <li>START_LAP, inicio de la vuelta.</li>
+  <li>END_LAP, fin de la vuelta, además envía el tiempo que ha tardado en dar la vuelta.</li>
+  <li>OBSTACLE_DETECTED, detección de obstáculo, envía a que distancia ha detectado el obstáculo.</li>
+  <li>LINE_LOST, perdida de linea.</li>
+  <li>PING, cada 4 segundos se envía este mensaje junto con el tiempo transcurrido.</li>
+  <li>LINE_FOUND, recuperación de linea.</li>
+  <li>VISIBLE_LINE, se envía el porcentaje de linea que se ha visto durante la vuelta.</li>
+  <li>INIT_LINE_SEARCH, inicia el algoritmo de búsqueda de linea.</li>
+  <li>STOP_LINE_SEARCH, finaliza el algoritmo de búsqueda de linea.</li>
+</ul>
+
+<p>Para enviar todos estos mensajes, el arduino sigue el siguiente protocolo diseñado específicamente para la comunicación Arduino-ESP: <i>{/action:=$ACCION}</i>. Si ademas se quiere enviar algún dato más se añade tras la acción : <i>{/action:=$ACCION\/time:=$TIME}</i></p>
+
+<h4 id="comunicación-iot-a-través-de-mqtt"><b>Comunicación IoT a través de MQTT</b></h4>
+
+<p>Cuando la ESP32 recibe los distintos mensajes por el puerto serie esta recoge los mensajes, obtiene los datos necesarios y los envía en formato JSON al servidor MQTT en donde se procesan los datos y se lleva un control remoto de la vuelta.</p>
+
+<h3 id="pid"><b>PID</b></h3>
+
+<p>El control PID (Proporcional-Integral-Derivativo) es un algoritmo ampliamente utilizado en sistemas de control para ajustar una variable de salida en función de un valor deseado. En esta práctica, se utiliza un control proporcional-derivativo (PD), para guiar el movimiento del coche mientras sigue una línea negra detectada por sensores de infrarrojos.</p>
+
+<p>El sistema de control PD se basa en los siguientes principios:</p>
+
+<h4 id="componente-proporcional-p"><b>Componente Proporcional (P):<b></b></b></h4>
+
+<p>Calcula una corrección basada en el error actual. En este caso, el error se define como la diferencia en intensidad de los valores de los sensores de infrarrojos a ambos lados de la línea. Este componente ajusta directamente las velocidades de los motores en función de la desviación de la línea, proporcionando una corrección inmediata.</p>
+
+<h4 id="componente-derivativo-d"><b>Componente Derivativo (D):<b></b></b></h4>
+
+<p>Ajusta la corrección en función del cambio del error en el tiempo. Este componente ayuda a suavizar los movimientos, evitando oscilaciones bruscas al anticipar el comportamiento del coche.</p>
+
+<p>En el contexto de esta practica, el algoritmo realiza los siguientes pasos:</p>
+
+<h4 id="1lectura-de-sensores"><b>1.Lectura de Sensores:<b></b></b></h4>
+
+<p>Los sensores de infrarrojos detectan la intensidad de la línea en tres puntos: izquierda, centro y derecha. Según los valores recibidos, el sistema determina si el coche está alineado con la línea, desviado a la izquierda, o desviado a la derecha.</p>
+
+<h4 id="2cálculo-del-error"><b>2.Cálculo del Error:<b></b></b></h4>
+
+<p>Se calcula el error como la diferencia en las lecturas de los sensores izquierdo y derecho. Este error indica qué tan lejos está el coche de estar perfectamente alineado con la línea.</p>
+<h4 id="3aplicación-del-control-pd"><b>3.Aplicación del Control PD:<b></b></b></h4>
+
+<ul>
+  <li>El error proporcional se multiplica por una constante de ganancia proporcional (Kp), lo que genera una corrección proporcional a la magnitud del error.</li>
+  <li>El cambio del error (derivada del error) se multiplica por una constante de ganancia derivativa (Kd​), que suaviza las correcciones para evitar oscilaciones.</li>
+</ul>
+
+<h4 id="4ajuste-de-velocidades-de-los-motores"><b>4.Ajuste de Velocidades de los Motores:<b></b></b></h4>
+
+<p>La corrección calculada se aplica para modificar las velocidades de los motores izquierdo y derecho, de manera que el coche pueda ajustar su trayectoria y mantenerse sobre la línea.</p>
+
+<h4 id="5limitación-de-velocidades"><b>5.Limitación de Velocidades:<b></b></b></h4>
+
+<p>Las velocidades calculadas se limitan para evitar valores fuera del rango permitido, asegurando un movimiento estable y seguro.</p>
 
 <h2 id="video">Video</h2>
 
+<div style="text-align: center;">
+    <video width="500" controls="">
+      <source src="/assets/videos/follow_line/coche-clase.mp4" type="video/mp4" />
+      Tu navegador no soporta la reproducción de videos.
+    </video>
+</div>
+
+<p> </p>
+
+<p>Colaborador Jorge Barroso Saugar</p>
 
   </div><a class="u-url" href="/2024/12/03/p4-follow-line.html" hidden></a>
 </article>
