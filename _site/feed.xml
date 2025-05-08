@@ -1,4 +1,108 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-12-23T19:28:30+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">PRACTICES</title><entry><title type="html">P4 Follow Line</title><link href="http://localhost:4000/2024/12/03/p4-follow-line.html" rel="alternate" type="text/html" title="P4 Follow Line" /><published>2024-12-03T00:00:00+01:00</published><updated>2024-12-03T00:00:00+01:00</updated><id>http://localhost:4000/2024/12/03/p4-follow-line</id><content type="html" xml:base="http://localhost:4000/2024/12/03/p4-follow-line.html"><![CDATA[<h1 id="rust-eze"><b>RUST-EZE</b></h1>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2025-05-08T10:43:31+02:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">PRACTICES</title><entry><title type="html">Albor rover</title><link href="http://localhost:4000/2025/05/05/albor-rover.html" rel="alternate" type="text/html" title="Albor rover" /><published>2025-05-05T00:00:00+02:00</published><updated>2025-05-05T00:00:00+02:00</updated><id>http://localhost:4000/2025/05/05/albor-rover</id><content type="html" xml:base="http://localhost:4000/2025/05/05/albor-rover.html"><![CDATA[<h2 id="albor"><b>ALBOR</b></h2>
+
+<div style="text-align: center;">
+  <img src="/assets/images/modelado/modelo_renderizado.png" alt="GIF divertido" width="400" />
+</div>
+
+<p> </p>
+
+<p>Albor es un robot rover diseñado con un brazo de tipo scara y un compartimento con una capacidad de 3 cubos de 50 cm de arista. Este robot fue diseñado en blender. Y después fue implementado en ros2 para su uso en gazebo harmonic. Para poder utilizar el robot al final del post hay un enlace al github con los dos paquetes indispensables, descargalos y compilalos en tu workspace de ros jazzy.</p>
+
+<p>Para la realizacion de este robot se ha hecho uso de:</p>
+<ul>
+  <li>Blender con phobos.</li>
+  <li><a href="https://gazebosim.org/docs/latest/getstarted/">Gazebo harmonic</a></li>
+  <li><a href="https://moveit.picknik.ai/main/index.html">Moveit</a></li>
+  <li><a href="https://wiki.ros.org/teleop_twist_keyboard">Teleoperar el robot en gazebo</a></li>
+</ul>
+
+<p> </p>
+
+<h2 id="arbol-de-transformada"><b>Arbol de transformada</b></h2>
+
+<div style="text-align: center;">
+  <img src="/assets/images/modelado/Captura desde 2025-05-08 10-30-38.png" alt="GIF divertido" width="1000" />
+</div>
+
+<p> </p>
+
+<div style="text-align: center;">
+  <img src="/assets/images/modelado/Captura_parteA.png" alt="GIF divertido" width="1000" />
+</div>
+
+<p> </p>
+
+<h2 id="analisis-gráfico"><b>Analisis gráfico</b></h2>
+
+<h3 id="gráfica-posición-de-las-ruedas-vs-tiempo">Gráfica Posición de las ruedas vs Tiempo</h3>
+
+<div style="text-align: center;">
+  <img src="/assets/images/modelado/tiempo_vs_posicionruedas.png" alt="GIF divertido" width="400" />
+</div>
+<p> </p>
+
+<p>En el eje y se encuentra la posición en metros y en el eje x se encuentra el tiempo en segundos.</p>
+
+<p>En esta grafica podemos observar que la posición de las ruedas no varia hasta que iniciamos el movimiento del robot para aproximarnos al cubo. Una vez que nos aproximamos al cubo, a la posición para realizar el pick and place, se mantiene en esa posición.</p>
+
+<p> </p>
+
+<h3 id="gráfica-aceleración-vs-tiempo">Gráfica Aceleración vs Tiempo</h3>
+
+<div style="text-align: center;">
+  <img src="/assets/images/modelado/tiempo_vs_aceleracion.png" alt="GIF divertido" width="400" />
+</div>
+
+<p> </p>
+
+<p>En el eje y se encuantra la aceleración lineal en m/s² y en el eje x se encuentra el tiempo en segundos.</p>
+
+<p>En esta grafica podemos ver dos diferencias principales, por un lado las aceleraciones en el eje ‘x’ y en el eje ‘y’ y por otro lado las aceleraciones en el eje z.</p>
+
+<ul>
+  <li>
+    <p>La aceleración en el eje x observamos que es cero al principio de la ejecución, entre los segundos 30 y 60 aproximadamente se realiza un movimiento en este eje, esto se debe a las oscilaciones que podemos observar.Y Una vez acabado el moviento vuelve a cero.</p>
+  </li>
+  <li>
+    <p>La aceleración en el eje y se comporta de la misma manera que la aceleración en el eje x.</p>
+  </li>
+  <li>
+    <p>La aceleración en el eje z se encuentra constante en 10 m/s² esto se corresponde a la gravedad ya que el eje z apunta hacia arriba.</p>
+  </li>
+</ul>
+
+<p> </p>
+
+<h3 id="gráfica-gasto-vs-tiempo">Gráfica Gasto vs Tiempo</h3>
+
+<div style="text-align: center;">
+  <img src="/assets/images/modelado/gasto_vs_tiempo.png" alt="GIF divertido" width="600" />
+</div>
+
+<p> </p>
+
+<p>En esta grafica observamos primeramente, desde casi 400 hasta 415, se realiza un primer moviento correspondiente a estirar el brazo scara para posicionar el brazo para coger el cubo. La siguiente oscilacion corresponde a otro moviento del bazo para posicionarlo en posicion para depositar el cubo en el compartimento del rover y volver a la posicion anterior. La siguiente oscilación es negativa y corresponde a la fuerxa negativa para bajar el brazo y agarrar el cubo y la oscilación posistiva corresponde a volver a subir el brazo con el cubo agarrado.</p>
+
+<p> </p>
+
+<h2 id="video-de-ejecución"><b>Video de ejecución</b></h2>
+
+<div style="text-align: center;">
+    <video width="500" controls="">
+      <source src="/assets/videos/modelado/video.mp4" type="video/mp4" />
+      Tu navegador no soporta la reproducción de videos.
+    </video>
+</div>
+
+<p> 
+ </p>
+
+<h4 id="rosbag">Rosbag</h4>
+<p><a href="https://urjc-my.sharepoint.com/:f:/g/personal/a_lopezd_2022_alumnos_urjc_es/EsfUU-JLf9REudeLFno0jcUBakbcHoI9GJ1tpp3oV6GYgg?e=yLijZk">enlace de descarga del rosbag</a></p>
+<h4 id="github">Github</h4>
+<p><a href="https://github.com/alopezd2022/albor_repo.git">enlace del github de la practica</a></p>
+
+<p> </p>]]></content><author><name></name></author><category term="modelado-y-simulacion-de-robots" /><summary type="html"><![CDATA[ALBOR]]></summary></entry><entry><title type="html">P4 Follow Line</title><link href="http://localhost:4000/2024/12/03/p4-follow-line.html" rel="alternate" type="text/html" title="P4 Follow Line" /><published>2024-12-03T00:00:00+01:00</published><updated>2024-12-03T00:00:00+01:00</updated><id>http://localhost:4000/2024/12/03/p4-follow-line</id><content type="html" xml:base="http://localhost:4000/2024/12/03/p4-follow-line.html"><![CDATA[<h1 id="rust-eze"><b>RUST-EZE</b></h1>
 <h2 id="descripción"><b>Descripción</b></h2>
 
 <p>El objetivo de esta practica es diseñar un sigue lineas incorporando comunación IoT, controladores, Arduino Threads…</p>

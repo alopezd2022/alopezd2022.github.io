@@ -26,6 +26,8 @@ nav:
     url: /mobile-robotics/
   - title: Embedded and real-time systems
     url: /embedded-and-real-time-systems/
+  - title: Modelado y simulación de robots
+    url: /modelado-y-simulacion-de-robots/
 # Build settings
 theme: minima
 plugins:
