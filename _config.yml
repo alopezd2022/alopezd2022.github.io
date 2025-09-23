@@ -28,6 +28,8 @@ nav:
     url: /embedded-and-real-time-systems/
   - title: Modelado y simulación de robots
     url: /modelado-y-simulacion-de-robots/
+  - title: Service Robotics
+    url: /service-robotics/
 # Build settings
 theme: minima
 plugins:
