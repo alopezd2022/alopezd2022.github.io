@@ -1,4 +1,61 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2025-10-12T11:07:41+02:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">PRACTICES</title><entry><title type="html">Albor rover</title><link href="http://localhost:4000/2025/10/12/p1-localizec-vacuum-cleaner.html" rel="alternate" type="text/html" title="Albor rover" /><published>2025-10-12T00:00:00+02:00</published><updated>2025-10-12T00:00:00+02:00</updated><id>http://localhost:4000/2025/10/12/p1-localizec-vacuum-cleaner</id><content type="html" xml:base="http://localhost:4000/2025/10/12/p1-localizec-vacuum-cleaner.html"><![CDATA[<h2 id="localized-vacuum-cleaner"><b>Localized Vacuum Cleaner</b></h2>]]></content><author><name></name></author><category term="service-robotics" /><summary type="html"><![CDATA[Localized Vacuum Cleaner]]></summary></entry><entry><title type="html">Albor rover</title><link href="http://localhost:4000/2025/05/05/albor-rover.html" rel="alternate" type="text/html" title="Albor rover" /><published>2025-05-05T00:00:00+02:00</published><updated>2025-05-05T00:00:00+02:00</updated><id>http://localhost:4000/2025/05/05/albor-rover</id><content type="html" xml:base="http://localhost:4000/2025/05/05/albor-rover.html"><![CDATA[<h2 id="albor"><b>ALBOR</b></h2>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2025-10-12T13:47:24+02:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">PRACTICES</title><entry><title type="html">Localized Vacuum Cleaner</title><link href="http://localhost:4000/2025/10/12/p1-localizec-vacuum-cleaner.html" rel="alternate" type="text/html" title="Localized Vacuum Cleaner" /><published>2025-10-12T00:00:00+02:00</published><updated>2025-10-12T00:00:00+02:00</updated><id>http://localhost:4000/2025/10/12/p1-localizec-vacuum-cleaner</id><content type="html" xml:base="http://localhost:4000/2025/10/12/p1-localizec-vacuum-cleaner.html"><![CDATA[<h2 id="description"><b>Description</b></h2>
+<p>In this practice, a <strong>BSA (Backtracking Spiral Algorithm)</strong> coverage algorithm is implemented and applied to the autonomous navigation of a vacuum robot. The goal is to achieve complete coverage of the free area while avoiding obstacles and optimizing the robot’s movements.</p>
+
+<h2 id="strategy"><b>Strategy</b></h2>
+
+<h4 id="1º-map-record"><b>1º Map record</b></h4>
+
+<p>This first step consists of obtaining the relation between the pose 3d of the vacuum in the world and the pose 2D of the vacuum in the map.</p>
+
+<p>This relation lets us convert from pose 3D to pose 2D and vice versa. In order to get this relation we need to calculate the transformation matrix.
+Since the vacuum robot isn’t at the center of the map we can not create a simple relation and obtain a matrix from the rotation of the axes from world to map.</p>
+
+<p>Therefore, we need to get some points (many as we can) in 3D and the corresponding points in 2D so we can calculate least square an get the matrix which relates both sets of points. The more points we get, the less error is generated.</p>
+
+<h4 id="2º-creating-a-navigation-grid-map"><b>2º Creating a navigation grid map</b></h4>
+
+<p>The second step consists of creating a grid map. Each grid cell has a slightly smaller than the robot’s size in pixels. Having the size of each grid cell we can determinate the size of the navigation grid map. Each grid have a value depending on the states of the grid, if the grid cell corresponds to a obstacle the value is 0, if the grid cell is free, the value is 1 and if the robot has been in that grid cell, the value is 2.</p>
+
+<h4 id="3º-implementation-of-a-bsa-coverage-algorithm"><b>3º Implementation of a bsa coverage algorithm</b></h4>
+
+<p><em>The coverage algorthim uses a grid-based model, and assures the complete coverage of non-occupied cells; partially occupied cells are not considere, is supported by two main concepts: covering of simple regions using a spiral-like path and linking of simple regions based on a backtracking mechanism</em> <a href="https://www.academia.edu/103916763/BSA_A_Complete_Coverage_Algorithm" title="BSA: A Complete Coverage Algorithm">1</a></p>
+
+<p>As the article said, this algorthim uses a coverage based on spiral that goes around all the free cell. But what happens when the robot ends a spiral and all the surrounding cells are occupied?. This algorithm also implements critical points and return points. A critical point is a point without an exit, and a return point is the closest free point to the critical point. So when the robot is at a critical point, it must move to a return point and continue the algorithm from there.</p>
+
+<p>In order to get the closest return point and the path to this point, we need to implement a backtracking mechanism such as BFS Algorithm, Breadth-First Search.
+Breadth-First Search consists of expanding an unvisited node and its successors until the goal is reached. In this case the goal is all the return points, and the node start in the critical point and go around each cell and its successors until a cell which is a return point is found. This allows obtaining the closest return point and the full path from the critical point to the return point.</p>
+
+<div style="text-align: center;">
+    <video width="500" controls="">
+      <source src="/assets/videos/p1_service/bsa.mp4" type="video/mp4" />
+      Tu navegador no soporta la reproducción de videos.
+    </video>
+
+</div>
+
+<h4 id="4º-reactive-piloting-according-to-the-planned-route"><b>4º Reactive piloting according to the planned route</b></h4>
+
+<p>The piloting of the robot involves simple movements in which it is controlled by its position, in each iteration there is a new goal, a new grid in the map to move to. The robot is controlled by a simple P control with proportional gains applied to the error both in the angle and in the distance to the goal.</p>
+
+<h2 id="inconvenient-and-solutions"><b>Inconvenient and solutions</b></h2>
+
+<p>To obtain the points to create the transformation matrix, I initially obtain ten points, which were sufficient to create the navegation grid and to run the BSA algorithm. However, when the robot had to move, the transformation matrix wasn’t accurate enough and the robot collided at certain points. The solution was to obtain more points to create an accurate matrix. The points were the robot collided were the one that I used to improve the matrix.</p>
+
+<p>Also regarding to obstacle avoidance, a good approach is to dilate the obstacles in the map so the robot won’t collide with them in the real world. Therefore, I apply an erosion operation to the map, resulting in less white area and more black areas.</p>
+
+<div style="text-align: center;">
+    <img src="/assets/images/p1_servicios/mapa_sinerosion.png" alt="sin erosión" style="width: 300px; display: inline-block; margin: 0 10px;" />
+    <img src="/assets/images/p1_servicios/mapa_erosionado.png" alt="erosionado" style="width: 300px; display: inline-block; margin: 0 10px;" />
+</div>
+
+<h2 id="demostration"><b>Demostration</b></h2>
+
+<div style="text-align: center;">
+    <video width="500" controls="">
+      <source src="/assets/videos/p1_service/output_4x_largo.mp4" type="video/mp4" />
+      Tu navegador no soporta la reproducción de videos.
+    </video>
+</div>]]></content><author><name></name></author><category term="service-robotics" /><summary type="html"><![CDATA[Description In this practice, a BSA (Backtracking Spiral Algorithm) coverage algorithm is implemented and applied to the autonomous navigation of a vacuum robot. The goal is to achieve complete coverage of the free area while avoiding obstacles and optimizing the robot’s movements.]]></summary></entry><entry><title type="html">Albor rover</title><link href="http://localhost:4000/2025/05/05/albor-rover.html" rel="alternate" type="text/html" title="Albor rover" /><published>2025-05-05T00:00:00+02:00</published><updated>2025-05-05T00:00:00+02:00</updated><id>http://localhost:4000/2025/05/05/albor-rover</id><content type="html" xml:base="http://localhost:4000/2025/05/05/albor-rover.html"><![CDATA[<h2 id="albor"><b>ALBOR</b></h2>
 
 <div style="text-align: center;">
   <img src="/assets/images/modelado/modelo_renderizado.png" alt="GIF divertido" width="400" />

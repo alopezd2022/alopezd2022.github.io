@@ -3,21 +3,21 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Albor rover | PRACTICES</title>
+<title>Localized Vacuum Cleaner | PRACTICES</title>
 <meta name="generator" content="Jekyll v4.3.4" />
-<meta property="og:title" content="Albor rover" />
+<meta property="og:title" content="Localized Vacuum Cleaner" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="Localized Vacuum Cleaner" />
-<meta property="og:description" content="Localized Vacuum Cleaner" />
+<meta name="description" content="Description In this practice, a BSA (Backtracking Spiral Algorithm) coverage algorithm is implemented and applied to the autonomous navigation of a vacuum robot. The goal is to achieve complete coverage of the free area while avoiding obstacles and optimizing the robot’s movements." />
+<meta property="og:description" content="Description In this practice, a BSA (Backtracking Spiral Algorithm) coverage algorithm is implemented and applied to the autonomous navigation of a vacuum robot. The goal is to achieve complete coverage of the free area while avoiding obstacles and optimizing the robot’s movements." />
 <link rel="canonical" href="http://localhost:4000/2025/10/12/p1-localizec-vacuum-cleaner.html" />
 <meta property="og:url" content="http://localhost:4000/2025/10/12/p1-localizec-vacuum-cleaner.html" />
 <meta property="og:site_name" content="PRACTICES" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2025-10-12T00:00:00+02:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Albor rover" />
+<meta property="twitter:title" content="Localized Vacuum Cleaner" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-10-12T00:00:00+02:00","datePublished":"2025-10-12T00:00:00+02:00","description":"Localized Vacuum Cleaner","headline":"Albor rover","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2025/10/12/p1-localizec-vacuum-cleaner.html"},"url":"http://localhost:4000/2025/10/12/p1-localizec-vacuum-cleaner.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-10-12T00:00:00+02:00","datePublished":"2025-10-12T00:00:00+02:00","description":"Description In this practice, a BSA (Backtracking Spiral Algorithm) coverage algorithm is implemented and applied to the autonomous navigation of a vacuum robot. The goal is to achieve complete coverage of the free area while avoiding obstacles and optimizing the robot’s movements.","headline":"Localized Vacuum Cleaner","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2025/10/12/p1-localizec-vacuum-cleaner.html"},"url":"http://localhost:4000/2025/10/12/p1-localizec-vacuum-cleaner.html"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="PRACTICES" /></head>
 <body><header class="site-header" role="banner">
@@ -40,14 +40,71 @@
         <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title p-name" itemprop="name headline">Albor rover</h1>
+    <h1 class="post-title p-name" itemprop="name headline">Localized Vacuum Cleaner</h1>
     <p class="post-meta">
       <time class="dt-published" datetime="2025-10-12T00:00:00+02:00" itemprop="datePublished">Oct 12, 2025
       </time></p>
   </header>
 
   <div class="post-content e-content" itemprop="articleBody">
-    <h2 id="localized-vacuum-cleaner"><b>Localized Vacuum Cleaner</b></h2>
+    <h2 id="description"><b>Description</b></h2>
+<p>In this practice, a <strong>BSA (Backtracking Spiral Algorithm)</strong> coverage algorithm is implemented and applied to the autonomous navigation of a vacuum robot. The goal is to achieve complete coverage of the free area while avoiding obstacles and optimizing the robot’s movements.</p>
+
+<h2 id="strategy"><b>Strategy</b></h2>
+
+<h4 id="1º-map-record"><b>1º Map record</b></h4>
+
+<p>This first step consists of obtaining the relation between the pose 3d of the vacuum in the world and the pose 2D of the vacuum in the map.</p>
+
+<p>This relation lets us convert from pose 3D to pose 2D and vice versa. In order to get this relation we need to calculate the transformation matrix.
+Since the vacuum robot isn’t at the center of the map we can not create a simple relation and obtain a matrix from the rotation of the axes from world to map.</p>
+
+<p>Therefore, we need to get some points (many as we can) in 3D and the corresponding points in 2D so we can calculate least square an get the matrix which relates both sets of points. The more points we get, the less error is generated.</p>
+
+<h4 id="2º-creating-a-navigation-grid-map"><b>2º Creating a navigation grid map</b></h4>
+
+<p>The second step consists of creating a grid map. Each grid cell has a slightly smaller than the robot’s size in pixels. Having the size of each grid cell we can determinate the size of the navigation grid map. Each grid have a value depending on the states of the grid, if the grid cell corresponds to a obstacle the value is 0, if the grid cell is free, the value is 1 and if the robot has been in that grid cell, the value is 2.</p>
+
+<h4 id="3º-implementation-of-a-bsa-coverage-algorithm"><b>3º Implementation of a bsa coverage algorithm</b></h4>
+
+<p><em>The coverage algorthim uses a grid-based model, and assures the complete coverage of non-occupied cells; partially occupied cells are not considere, is supported by two main concepts: covering of simple regions using a spiral-like path and linking of simple regions based on a backtracking mechanism</em> <a href="https://www.academia.edu/103916763/BSA_A_Complete_Coverage_Algorithm" title="BSA: A Complete Coverage Algorithm">1</a></p>
+
+<p>As the article said, this algorthim uses a coverage based on spiral that goes around all the free cell. But what happens when the robot ends a spiral and all the surrounding cells are occupied?. This algorithm also implements critical points and return points. A critical point is a point without an exit, and a return point is the closest free point to the critical point. So when the robot is at a critical point, it must move to a return point and continue the algorithm from there.</p>
+
+<p>In order to get the closest return point and the path to this point, we need to implement a backtracking mechanism such as BFS Algorithm, Breadth-First Search.
+Breadth-First Search consists of expanding an unvisited node and its successors until the goal is reached. In this case the goal is all the return points, and the node start in the critical point and go around each cell and its successors until a cell which is a return point is found. This allows obtaining the closest return point and the full path from the critical point to the return point.</p>
+
+<div style="text-align: center;">
+    <video width="500" controls="">
+      <source src="/assets/videos/p1_service/bsa.mp4" type="video/mp4" />
+      Tu navegador no soporta la reproducción de videos.
+    </video>
+
+</div>
+
+<h4 id="4º-reactive-piloting-according-to-the-planned-route"><b>4º Reactive piloting according to the planned route</b></h4>
+
+<p>The piloting of the robot involves simple movements in which it is controlled by its position, in each iteration there is a new goal, a new grid in the map to move to. The robot is controlled by a simple P control with proportional gains applied to the error both in the angle and in the distance to the goal.</p>
+
+<h2 id="inconvenient-and-solutions"><b>Inconvenient and solutions</b></h2>
+
+<p>To obtain the points to create the transformation matrix, I initially obtain ten points, which were sufficient to create the navegation grid and to run the BSA algorithm. However, when the robot had to move, the transformation matrix wasn’t accurate enough and the robot collided at certain points. The solution was to obtain more points to create an accurate matrix. The points were the robot collided were the one that I used to improve the matrix.</p>
+
+<p>Also regarding to obstacle avoidance, a good approach is to dilate the obstacles in the map so the robot won’t collide with them in the real world. Therefore, I apply an erosion operation to the map, resulting in less white area and more black areas.</p>
+
+<div style="text-align: center;">
+    <img src="/assets/images/p1_servicios/mapa_sinerosion.png" alt="sin erosión" style="width: 300px; display: inline-block; margin: 0 10px;" />
+    <img src="/assets/images/p1_servicios/mapa_erosionado.png" alt="erosionado" style="width: 300px; display: inline-block; margin: 0 10px;" />
+</div>
+
+<h2 id="demostration"><b>Demostration</b></h2>
+
+<div style="text-align: center;">
+    <video width="500" controls="">
+      <source src="/assets/videos/p1_service/output_4x_largo.mp4" type="video/mp4" />
+      Tu navegador no soporta la reproducción de videos.
+    </video>
+</div>
 
   </div><a class="u-url" href="/2025/10/12/p1-localizec-vacuum-cleaner.html" hidden></a>
 </article>
