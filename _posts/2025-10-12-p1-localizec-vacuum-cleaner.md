@@ -68,12 +68,20 @@ Also regarding to obstacle avoidance, a good approach is to dilate the obstacles
 
 ## <b>Demostration</b>
 
-I propose two different solutions, the first one is the fastest solution (aprox 20 min). This solution has more speed but it doesn't clean as good as the second one. Therefore we sacrife the cleanning to the speed of doing the task.
+I propose two different solutions, the first one is the fastest solution (aprox 16 min).
 
-The second one, as I said, is the lowest solution (aprox 30 min). The movement is pretty slow but we ensure that every space of the house is clean at all. Besides, this solution has straight movements.
+<div style="text-align: center;">
+    <video width="500" controls>
+      <source src="{{ '/assets/videos/p1_service/video_cortox4.mp4' | relative_url }}" type="video/mp4">
+      Tu navegador no soporta la reproducción de videos.
+    </video>
+</div>
+
+The second one, as I said, is the lowest solution (aprox 30 min). The movement is pretty slow but we ensure that every space of the house is clean at all. 
 
 <div style="text-align: center;">
     <video width="500" controls>
       <source src="{{ '/assets/videos/p1_service/output_4x_largo.mp4' | relative_url }}" type="video/mp4">
       Tu navegador no soporta la reproducción de videos.
     </video>
+</div>
