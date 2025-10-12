@@ -3,6 +3,12 @@ layout: post
 title:  "Localized Vacuum Cleaner"
 tags: [service-robotics]
 ---
+
+<p align="center">
+  <img src="/assets/videos/p1_service/salida.gif" width="500">
+</p>
+
+
 ## <b>Description</b>
 In this practice, a **BSA (Backtracking Spiral Algorithm)** coverage algorithm is implemented and applied to the autonomous navigation of a vacuum robot. The goal is to achieve complete coverage of the free area while avoiding obstacles and optimizing the robot’s movements.
 
@@ -61,6 +67,10 @@ Also regarding to obstacle avoidance, a good approach is to dilate the obstacles
 
 
 ## <b>Demostration</b>
+
+I propose two different solutions, the first one is the fastest solution (aprox 20 min). This solution has more speed but it doesn't clean as good as the second one. Therefore we sacrife the cleanning to the speed of doing the task.
+
+The second one, as I said, is the lowest solution (aprox 30 min). The movement is pretty slow but we ensure that every space of the house is clean at all. Besides, this solution has straight movements.
 
 <div style="text-align: center;">
     <video width="500" controls>
