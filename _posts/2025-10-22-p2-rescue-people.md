@@ -39,7 +39,11 @@ Face detection is made by a module from Open CV called Haar Cascade [1]
 
 Some good practices include rotate each frame before trying to detect a face in it. There was also a issue where the algorithm sometimes detected a face in the water, so a color filtered was applied to remove blue tones, making the people detection more accurate.
 
-The position of the detected person is obtained by the position of the dron, as we detected with the ventral camera, we know that the dron is above the person so we get a valid aproximate position. It is enough to give it to the rescue team. We could also obtained the position of the person with the position x, y in the frame, but we don't have enough information of the camera, we need parameters such as the focal lenght, the sensor's camera size, etc.
+When our drone flies over the area, the downward-facing camera detects people on the ground. To locate each person precisely, we use the center of their face in the image as a reference.
+
+First, the face detector gives us a bounding box around the face. If we rotated the image to improve detection, we transform those coordinates back to the original image.
+
+Using the drone’s height and the camera’s field of view, we convert the face’s pixel position into real-world ground distances. Finally, adding the drone’s position gives us the exact coordinates of the person on the map, ready to mark their location or send alerts.
 
 <p align="center">
   <img src="/assets/images/p2_servicios/salida.gif" width="500">
