@@ -7,8 +7,6 @@
 <meta name="generator" content="Jekyll v4.3.4" />
 <meta property="og:title" content="Localized Vacuum Cleaner" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="Description In this practice, a BSA (Backtracking Spiral Algorithm) coverage algorithm is implemented and applied to the autonomous navigation of a vacuum robot. The goal is to achieve complete coverage of the free area while avoiding obstacles and optimizing the robot’s movements." />
-<meta property="og:description" content="Description In this practice, a BSA (Backtracking Spiral Algorithm) coverage algorithm is implemented and applied to the autonomous navigation of a vacuum robot. The goal is to achieve complete coverage of the free area while avoiding obstacles and optimizing the robot’s movements." />
 <link rel="canonical" href="http://localhost:4000/2025/10/12/p1-localizec-vacuum-cleaner.html" />
 <meta property="og:url" content="http://localhost:4000/2025/10/12/p1-localizec-vacuum-cleaner.html" />
 <meta property="og:site_name" content="PRACTICES" />
@@ -17,7 +15,7 @@
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="Localized Vacuum Cleaner" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-10-12T00:00:00+02:00","datePublished":"2025-10-12T00:00:00+02:00","description":"Description In this practice, a BSA (Backtracking Spiral Algorithm) coverage algorithm is implemented and applied to the autonomous navigation of a vacuum robot. The goal is to achieve complete coverage of the free area while avoiding obstacles and optimizing the robot’s movements.","headline":"Localized Vacuum Cleaner","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2025/10/12/p1-localizec-vacuum-cleaner.html"},"url":"http://localhost:4000/2025/10/12/p1-localizec-vacuum-cleaner.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-10-12T00:00:00+02:00","datePublished":"2025-10-12T00:00:00+02:00","headline":"Localized Vacuum Cleaner","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2025/10/12/p1-localizec-vacuum-cleaner.html"},"url":"http://localhost:4000/2025/10/12/p1-localizec-vacuum-cleaner.html"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="PRACTICES" /></head>
 <body><header class="site-header" role="banner">
@@ -47,7 +45,11 @@
   </header>
 
   <div class="post-content e-content" itemprop="articleBody">
-    <h2 id="description"><b>Description</b></h2>
+    <p align="center">
+  <img src="/assets/videos/p1_service/salida.gif" width="500" />
+</p>
+
+<h2 id="description"><b>Description</b></h2>
 <p>In this practice, a <strong>BSA (Backtracking Spiral Algorithm)</strong> coverage algorithm is implemented and applied to the autonomous navigation of a vacuum robot. The goal is to achieve complete coverage of the free area while avoiding obstacles and optimizing the robot’s movements.</p>
 
 <h2 id="strategy"><b>Strategy</b></h2>
@@ -98,6 +100,17 @@ Breadth-First Search consists of expanding an unvisited node and its successors 
 </div>
 
 <h2 id="demostration"><b>Demostration</b></h2>
+
+<p>I propose two different solutions, the first one is the fastest solution (aprox 16 min).</p>
+
+<div style="text-align: center;">
+    <video width="500" controls="">
+      <source src="/assets/videos/p1_service/video_cortox4.mp4" type="video/mp4" />
+      Tu navegador no soporta la reproducción de videos.
+    </video>
+</div>
+
+<p>The second one, as I said, is the lowest solution (aprox 30 min). The movement is pretty slow but we ensure that every space of the house is clean at all.</p>
 
 <div style="text-align: center;">
     <video width="500" controls="">

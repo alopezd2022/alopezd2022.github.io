@@ -1,4 +1,73 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2025-10-12T13:47:24+02:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">PRACTICES</title><entry><title type="html">Localized Vacuum Cleaner</title><link href="http://localhost:4000/2025/10/12/p1-localizec-vacuum-cleaner.html" rel="alternate" type="text/html" title="Localized Vacuum Cleaner" /><published>2025-10-12T00:00:00+02:00</published><updated>2025-10-12T00:00:00+02:00</updated><id>http://localhost:4000/2025/10/12/p1-localizec-vacuum-cleaner</id><content type="html" xml:base="http://localhost:4000/2025/10/12/p1-localizec-vacuum-cleaner.html"><![CDATA[<h2 id="description"><b>Description</b></h2>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2025-10-24T11:43:09+02:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">PRACTICES</title><entry><title type="html">Rescue people</title><link href="http://localhost:4000/2025/10/22/p2-rescue-people.html" rel="alternate" type="text/html" title="Rescue people" /><published>2025-10-22T00:00:00+02:00</published><updated>2025-10-22T00:00:00+02:00</updated><id>http://localhost:4000/2025/10/22/p2-rescue-people</id><content type="html" xml:base="http://localhost:4000/2025/10/22/p2-rescue-people.html"><![CDATA[<h2 id="description"><b>Description</b></h2>
+
+<p>This practice consists of the detection of the survivors in an area with a coverage algorithm and a face detection algorithm.</p>
+
+<h2 id="strategy"><b>Strategy</b></h2>
+
+<h4 id="1º-transform-from-gps-to-utm"><b>1º Transform from GPS to UTM</b></h4>
+
+<p>The last coordinate of the survivor are 40º30’29’‘N 40º30’29’‘W, but the dron doesn’t know about this coordinate system, so the coordinate must be transformed to UTM and metros.</p>
+
+<h4 id="2º-coverage-algorithm"><b>2º Coverage Algorithm</b></h4>
+
+<p>The coverage algorithm consists of going through a defined area creating squares with increasingly smaller sides.</p>
+
+<div style="text-align: center;">
+    <img src="/assets/images/p2_servicios/coverage.jpeg" alt="sin erosión" style="width: 300px; display: inline-block; margin: 0 10px;" />
+</div>
+
+<p>In order to create a robust algorithm, I defined an huge area where the survivor could be. Then, the area is divided in four quadrants and each quadrant is traversed by the coverage algorithm mentioned above. The center of the area is the last known position of the survivor and the size of each quadrant is determinated by the operator depending on the flight time, the weather… If the size of the area is increased, there are more probabilities of rescuing more people.</p>
+
+<div style="text-align: center;">
+    <img src="/assets/images/p2_servicios/quadrants.jpeg" alt="sin erosión" style="width: 300px; display: inline-block; margin: 0 10px;" />
+</div>
+
+<h4 id="3º-face-detection-"><b>3º Face Detection </b></h4>
+
+<p>Face detection is made by a module from Open CV called Haar Cascade <a href="https://docs.opencv.org/4.5.0/db/d28/tutorial_cascade_classifier.html" title="Haar Cascade: Face Detection">1</a></p>
+
+<p>Some good practices include rotate each frame before trying to detect a face in it. There was also a issue where the algorithm sometimes detected a face in the water, so a color filtered was applied to remove blue tones, making the people detection more accurate.</p>
+
+<p align="center">
+  <img src="/assets/images/p2_servicios/salida.gif" width="500" />
+</p>
+
+<h4 id="4º-ficticial-battery"><b>4º Ficticial battery</b></h4>
+
+<p>To make the simulation as realistic as possible, the dron’s battery is modeled. The dron’s battery lasts 15 minutes, and when it runs out, the dron returns to the base on the boat and waits for 5 seconds, to simulate charging.</p>
+
+<h2 id="inconvenient-and-solutions"><b>Inconvenient and solutions</b></h2>
+
+<p>Because of the quadrants has a significant size, the distance beetween each position is big as well. So I decided to divide the distance creating 
+sub-points improving the position control and decreasing the speed between each point.</p>
+
+<p>In order to improve the coverage algorithm and make sure that the dron visits each position commanded, I added a control time to ensure that the dron stays at a point during 0.5 seconds.</p>
+
+<h2 id="demostration"><b>Demostration</b></h2>
+
+<p>Demostration of people’s detection.</p>
+
+<p>In the video, you will watch the dron’s detection in each quadrant. In the first quadrant, top left, the dron detects 3 people. In the second quadrant, bottom left, the dron detects 1 person and in the third quadrant, top right, the dron detects 2 people. I didn’t record the fourth quadrant because of the duration of the video and I knew that the dron had detected the 6 people.</p>
+
+<div style="text-align: center;">
+    <video width="500" controls="">
+      <source src="/assets/videos/p2_service/video_cortado.mp4" type="video/mp4" />
+      Tu navegador no soporta la reproducción de videos.
+    </video>
+</div>
+
+<p>Demostration of charging the battery</p>
+
+<div style="text-align: center;">
+    <video width="500" controls="">
+      <source src="/assets/videos/p2_service/video_recarga_cortado.mp4" type="video/mp4" />
+      Tu navegador no soporta la reproducción de videos.
+    </video>
+</div>]]></content><author><name></name></author><category term="service-robotics" /><summary type="html"><![CDATA[Description]]></summary></entry><entry><title type="html">Localized Vacuum Cleaner</title><link href="http://localhost:4000/2025/10/12/p1-localizec-vacuum-cleaner.html" rel="alternate" type="text/html" title="Localized Vacuum Cleaner" /><published>2025-10-12T00:00:00+02:00</published><updated>2025-10-12T00:00:00+02:00</updated><id>http://localhost:4000/2025/10/12/p1-localizec-vacuum-cleaner</id><content type="html" xml:base="http://localhost:4000/2025/10/12/p1-localizec-vacuum-cleaner.html"><![CDATA[<p align="center">
+  <img src="/assets/videos/p1_service/salida.gif" width="500" />
+</p>
+
+<h2 id="description"><b>Description</b></h2>
 <p>In this practice, a <strong>BSA (Backtracking Spiral Algorithm)</strong> coverage algorithm is implemented and applied to the autonomous navigation of a vacuum robot. The goal is to achieve complete coverage of the free area while avoiding obstacles and optimizing the robot’s movements.</p>
 
 <h2 id="strategy"><b>Strategy</b></h2>
@@ -50,12 +119,23 @@ Breadth-First Search consists of expanding an unvisited node and its successors 
 
 <h2 id="demostration"><b>Demostration</b></h2>
 
+<p>I propose two different solutions, the first one is the fastest solution (aprox 16 min).</p>
+
+<div style="text-align: center;">
+    <video width="500" controls="">
+      <source src="/assets/videos/p1_service/video_cortox4.mp4" type="video/mp4" />
+      Tu navegador no soporta la reproducción de videos.
+    </video>
+</div>
+
+<p>The second one, as I said, is the lowest solution (aprox 30 min). The movement is pretty slow but we ensure that every space of the house is clean at all.</p>
+
 <div style="text-align: center;">
     <video width="500" controls="">
       <source src="/assets/videos/p1_service/output_4x_largo.mp4" type="video/mp4" />
       Tu navegador no soporta la reproducción de videos.
     </video>
-</div>]]></content><author><name></name></author><category term="service-robotics" /><summary type="html"><![CDATA[Description In this practice, a BSA (Backtracking Spiral Algorithm) coverage algorithm is implemented and applied to the autonomous navigation of a vacuum robot. The goal is to achieve complete coverage of the free area while avoiding obstacles and optimizing the robot’s movements.]]></summary></entry><entry><title type="html">Albor rover</title><link href="http://localhost:4000/2025/05/05/albor-rover.html" rel="alternate" type="text/html" title="Albor rover" /><published>2025-05-05T00:00:00+02:00</published><updated>2025-05-05T00:00:00+02:00</updated><id>http://localhost:4000/2025/05/05/albor-rover</id><content type="html" xml:base="http://localhost:4000/2025/05/05/albor-rover.html"><![CDATA[<h2 id="albor"><b>ALBOR</b></h2>
+</div>]]></content><author><name></name></author><category term="service-robotics" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">Albor rover</title><link href="http://localhost:4000/2025/05/05/albor-rover.html" rel="alternate" type="text/html" title="Albor rover" /><published>2025-05-05T00:00:00+02:00</published><updated>2025-05-05T00:00:00+02:00</updated><id>http://localhost:4000/2025/05/05/albor-rover</id><content type="html" xml:base="http://localhost:4000/2025/05/05/albor-rover.html"><![CDATA[<h2 id="albor"><b>ALBOR</b></h2>
 
 <div style="text-align: center;">
   <img src="/assets/images/modelado/modelo_renderizado.png" alt="GIF divertido" width="400" />
