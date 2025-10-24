@@ -39,11 +39,13 @@ Face detection is made by a module from Open CV called Haar Cascade [1]
 
 Some good practices include rotate each frame before trying to detect a face in it. There was also a issue where the algorithm sometimes detected a face in the water, so a color filtered was applied to remove blue tones, making the people detection more accurate.
 
+The position of the detected person is obtained by the position of the dron, as we detected with the ventral camera, we know that the dron is above the person so we get a valid aproximate position. It is enough to give it to the rescue team. We could also obtained the position of the person with the position x, y in the frame, but we don't have enough information of the camera, we need parameters such as the focal lenght, the sensor's camera size, etc.
+
 <p align="center">
   <img src="/assets/images/p2_servicios/salida.gif" width="500">
 </p>
 
-#### <b>4º Ficticial battery</b> 
+#### <b>4 Ficticial battery</b> 
 
 To make the simulation as realistic as possible, the dron's battery is modeled. The dron's battery lasts 15 minutes, and when it runs out, the dron returns to the base on the boat and waits for 5 seconds, to simulate charging.
 
