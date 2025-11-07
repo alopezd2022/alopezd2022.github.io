@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Autonomous Parking | PRACTICES</title>
+<meta name="generator" content="Jekyll v4.3.4" />
+<meta property="og:title" content="Autonomous Parking" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Description" />
+<meta property="og:description" content="Description" />
+<link rel="canonical" href="http://localhost:4000/2025/11/07/p3-autoparking.html" />
+<meta property="og:url" content="http://localhost:4000/2025/11/07/p3-autoparking.html" />
+<meta property="og:site_name" content="PRACTICES" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2025-11-07T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Autonomous Parking" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-11-07T00:00:00+01:00","datePublished":"2025-11-07T00:00:00+01:00","description":"Description","headline":"Autonomous Parking","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2025/11/07/p3-autoparking.html"},"url":"http://localhost:4000/2025/11/07/p3-autoparking.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="PRACTICES" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">PRACTICES</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a><a class="page-link" href="/modelado-y-simulacion-de-robots/">Modelado y simulación de robots</a><a class="page-link" href="/mobile-robotics/">Mobile Robotics</a><a class="page-link" href="/service-robotics/">Service Robotics</a><a class="page-link" href="/embedded-and-real-time-systems/">Embedded and real-time systems</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Autonomous Parking</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2025-11-07T00:00:00+01:00" itemprop="datePublished">Nov 7, 2025
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h2 id="description"><b>Description</b></h2>
+
+<p>This practice consists of developing an <strong>autonomous system</strong> capable of <strong>detecting a parking space</strong> and <strong>performing the parking maneuver</strong> without human intervention.
+For this purpose, data from <strong>laser sensors</strong> located at the <strong>front</strong>, <strong>rear</strong>, and <strong>sides</strong> of the vehicle are used, along with <strong>speed (V)</strong> and <strong>steering (W)</strong> control.</p>
+
+<p>The algorithm implements different <strong>behavioral states</strong>, including: <strong>space search</strong>, <strong>alignment</strong>, <strong>parking space type identification</strong>, and <strong>parking maneuvers</strong> depending on the case.</p>
+
+<h2 id="strategy"><b>Strategy</b></h2>
+
+<p>The overall operation of the system is based on a <strong>state machine</strong> that changes dynamically according to the <strong>sensor readings</strong>.
+Below are the main <strong>modules</strong> and <strong>phases</strong> of the practice.</p>
+
+<h3 id="1º-state-searching-"><b>1º State: SEARCHING </b></h3>
+
+<p>In this phase, the robot moves forward in a straight line while keeping itself aligned with the parked cars on its right.
+To achieve this, the <code class="language-plaintext highlighter-rouge">get_align()</code> function compares the <strong>symmetric values</strong> from the <strong>right-side sensor</strong> to correct small deviations through the steering control <code class="language-plaintext highlighter-rouge">HAL.setW(w)</code>.</p>
+
+<p>At the same time, the <code class="language-plaintext highlighter-rouge">search_parking()</code> function evaluates whether there is a sufficiently large space to park between two vehicles, using a geometry based on the <strong>Pythagorean theorem</strong>. Through this method, the <strong>angles</strong> and the <strong>longest side</strong> of the detected rectangle are calculated and compared with the <strong>laser readings</strong> to determine whether the space is free or not.
+When a valid space is detected, the robot stops its forward motion and switches to the <strong>IDENTIFY</strong> state.</p>
+
+<h3 id="2º-state-identify-"><b>2º State: IDENTIFY </b></h3>
+
+<p>Once a potential parking space is detected, the system analyzes the distances at the <strong>extreme angles</strong> of the space (<code class="language-plaintext highlighter-rouge">min_angle</code> and <code class="language-plaintext highlighter-rouge">max_angle</code>) to determine the <strong>type of space</strong>:</p>
+
+<ul>
+  <li><strong>Type 0:</strong> there is a car in front and behind (intermediate space).</li>
+  <li><strong>Type 1:</strong> no car in front (open space at the front).</li>
+  <li><strong>Type 2:</strong> no car behind (open space at the rear).</li>
+</ul>
+
+<p>This identification is crucial to decide <strong>the direction of the maneuver</strong> and the <strong>movement mode</strong> (forward or reverse).</p>
+
+<h3 id="3º-state-align-"><b>3º State: ALIGN </b></h3>
+
+<p>In this state, the vehicle adjusts its position to become <strong>parallel to the parked cars</strong> before starting the maneuver.
+The <code class="language-plaintext highlighter-rouge">align_with_car()</code> function once again uses data from the <strong>right-side sensor</strong> to maintain alignment and stops the movement once the <strong>geometry of the space</strong> matches the expected configuration.</p>
+
+<h3 id="4º-state-manoeuvre-"><b>4º State: MANOEUVRE </b></h3>
+
+<p>This state covers both <strong>parking with a car in front and another behind</strong> (type 0), and <strong>parking with only a car in front</strong> (type 2), since the movements are essentially the same.
+The only difference lies in the <strong>reference system</strong> used when reversing:
+when there are cars both in front and behind, the <strong>car behind</strong> is used as a reference while backing up; however, when there is only a car in front, that <strong>front car</strong> becomes the reference point.</p>
+
+<p>The parking process is divided into <strong>substates</strong> that simulate a real parking maneuver:</p>
+
+<ol>
+  <li><strong>Reverse:</strong> the vehicle steers backward at a certain angle until it detects an increase in the lateral distance.</li>
+  <li><strong>Forward:</strong> it continues reversing while correcting the steering angle until it reaches a minimum safe distance from the car behind or the car in front.</li>
+  <li><strong>Straighten:</strong> it moves slightly forward while straightening the wheels to end up fully aligned within the parking space.</li>
+</ol>
+
+<p>At the end of this sequence, the vehicle is properly parked and stops.</p>
+
+<h3 id="5º-state-manouvre_1-"><b>5º State: MANOUVRE_1 </b></h3>
+
+<p>If the detected space is <strong>open at the front</strong> (type 1), the maneuver differs slightly:</p>
+
+<ul>
+  <li>The vehicle moves forward while turning to the right.</li>
+  <li>When the lateral space increases enough, it straightens the wheels.</li>
+  <li>Then, it reverses to center its position within the parking space.</li>
+</ul>
+
+<p>This procedure ensures <strong>efficient and safe parking</strong>, adapting to the different types of spaces encountered.</p>
+
+<h2 id="inconvenients-and-solutions"><b>Inconvenients and Solutions</b></h2>
+
+<ul>
+  <li><strong>Infinite sensor readings:</strong> when the lasers did not detect any obstacles, they returned <code class="language-plaintext highlighter-rouge">inf</code>. This was solved using the <code class="language-plaintext highlighter-rouge">clean()</code> function, which replaces these values with the maximum measurable range.</li>
+  <li><strong>Unstable alignment:</strong> small oscillations were observed when trying to maintain parallelism with the parked cars. This was stabilized by adjusting the proportional factor <code class="language-plaintext highlighter-rouge">k</code> of the error control.</li>
+  <li><strong>Sudden substate changes:</strong> distance thresholds (<code class="language-plaintext highlighter-rouge">threshold_distance</code>) and short time delays were added to prevent incorrect transitions between phases.</li>
+</ul>
+
+<h2 id="demonstration"><b>Demonstration</b></h2>
+
+<p>In the following videos, the complete sequence can be observed: <strong>space search</strong>, <strong>identification</strong>, and <strong>parking maneuver</strong>.</p>
+
+<p><strong>Parking with a car in front and another behind</strong></p>
+
+<div style="text-align: center;">
+    <video width="500" controls="">
+      <source src="/assets/videos/p3_service/aparcar_delante_atras_recortado.mp4" type="video/mp4" />
+      Tu navegador no soporta la reproducción de videos.
+    </video>
+</div>
+
+<p><strong>Parking with only a car behind</strong></p>
+
+<div style="text-align: center;">
+    <video width="500" controls="">
+      <source src="/assets/videos/p3_service/aparcar_para_atras_recortado.mp4" type="video/mp4" />
+      Tu navegador no soporta la reproducción de videos.
+    </video>
+</div>
+
+<p><strong>Parking with only a car in front</strong></p>
+
+<div style="text-align: center;">
+    <video width="500" controls="">
+      <source src="/assets/videos/p3_service/aparcar_delante_recortado.mp4" type="video/mp4" />
+      Tu navegador no soporta la reproducción de videos.
+    </video>
+</div>
+
+  </div><a class="u-url" href="/2025/11/07/p3-autoparking.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">PRACTICES</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">PRACTICES</li><li><a class="u-email" href="mailto:a.lopezd.2022@alumnos.urjc.es">a.lopezd.2022@alumnos.urjc.es</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/alopezd2022"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">alopezd2022</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p></p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

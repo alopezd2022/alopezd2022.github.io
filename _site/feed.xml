@@ -1,4 +1,106 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2025-10-24T11:43:09+02:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">PRACTICES</title><entry><title type="html">Rescue people</title><link href="http://localhost:4000/2025/10/22/p2-rescue-people.html" rel="alternate" type="text/html" title="Rescue people" /><published>2025-10-22T00:00:00+02:00</published><updated>2025-10-22T00:00:00+02:00</updated><id>http://localhost:4000/2025/10/22/p2-rescue-people</id><content type="html" xml:base="http://localhost:4000/2025/10/22/p2-rescue-people.html"><![CDATA[<h2 id="description"><b>Description</b></h2>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2025-11-07T12:06:35+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">PRACTICES</title><entry><title type="html">Autonomous Parking</title><link href="http://localhost:4000/2025/11/07/p3-autoparking.html" rel="alternate" type="text/html" title="Autonomous Parking" /><published>2025-11-07T00:00:00+01:00</published><updated>2025-11-07T00:00:00+01:00</updated><id>http://localhost:4000/2025/11/07/p3-autoparking</id><content type="html" xml:base="http://localhost:4000/2025/11/07/p3-autoparking.html"><![CDATA[<h2 id="description"><b>Description</b></h2>
+
+<p>This practice consists of developing an <strong>autonomous system</strong> capable of <strong>detecting a parking space</strong> and <strong>performing the parking maneuver</strong> without human intervention.
+For this purpose, data from <strong>laser sensors</strong> located at the <strong>front</strong>, <strong>rear</strong>, and <strong>sides</strong> of the vehicle are used, along with <strong>speed (V)</strong> and <strong>steering (W)</strong> control.</p>
+
+<p>The algorithm implements different <strong>behavioral states</strong>, including: <strong>space search</strong>, <strong>alignment</strong>, <strong>parking space type identification</strong>, and <strong>parking maneuvers</strong> depending on the case.</p>
+
+<h2 id="strategy"><b>Strategy</b></h2>
+
+<p>The overall operation of the system is based on a <strong>state machine</strong> that changes dynamically according to the <strong>sensor readings</strong>.
+Below are the main <strong>modules</strong> and <strong>phases</strong> of the practice.</p>
+
+<h3 id="1º-state-searching-"><b>1º State: SEARCHING </b></h3>
+
+<p>In this phase, the robot moves forward in a straight line while keeping itself aligned with the parked cars on its right.
+To achieve this, the <code class="language-plaintext highlighter-rouge">get_align()</code> function compares the <strong>symmetric values</strong> from the <strong>right-side sensor</strong> to correct small deviations through the steering control <code class="language-plaintext highlighter-rouge">HAL.setW(w)</code>.</p>
+
+<p>At the same time, the <code class="language-plaintext highlighter-rouge">search_parking()</code> function evaluates whether there is a sufficiently large space to park between two vehicles, using a geometry based on the <strong>Pythagorean theorem</strong>. Through this method, the <strong>angles</strong> and the <strong>longest side</strong> of the detected rectangle are calculated and compared with the <strong>laser readings</strong> to determine whether the space is free or not.
+When a valid space is detected, the robot stops its forward motion and switches to the <strong>IDENTIFY</strong> state.</p>
+
+<h3 id="2º-state-identify-"><b>2º State: IDENTIFY </b></h3>
+
+<p>Once a potential parking space is detected, the system analyzes the distances at the <strong>extreme angles</strong> of the space (<code class="language-plaintext highlighter-rouge">min_angle</code> and <code class="language-plaintext highlighter-rouge">max_angle</code>) to determine the <strong>type of space</strong>:</p>
+
+<ul>
+  <li><strong>Type 0:</strong> there is a car in front and behind (intermediate space).</li>
+  <li><strong>Type 1:</strong> no car in front (open space at the front).</li>
+  <li><strong>Type 2:</strong> no car behind (open space at the rear).</li>
+</ul>
+
+<p>This identification is crucial to decide <strong>the direction of the maneuver</strong> and the <strong>movement mode</strong> (forward or reverse).</p>
+
+<h3 id="3º-state-align-"><b>3º State: ALIGN </b></h3>
+
+<p>In this state, the vehicle adjusts its position to become <strong>parallel to the parked cars</strong> before starting the maneuver.
+The <code class="language-plaintext highlighter-rouge">align_with_car()</code> function once again uses data from the <strong>right-side sensor</strong> to maintain alignment and stops the movement once the <strong>geometry of the space</strong> matches the expected configuration.</p>
+
+<h3 id="4º-state-manoeuvre-"><b>4º State: MANOEUVRE </b></h3>
+
+<p>This state covers both <strong>parking with a car in front and another behind</strong> (type 0), and <strong>parking with only a car in front</strong> (type 2), since the movements are essentially the same.
+The only difference lies in the <strong>reference system</strong> used when reversing:
+when there are cars both in front and behind, the <strong>car behind</strong> is used as a reference while backing up; however, when there is only a car in front, that <strong>front car</strong> becomes the reference point.</p>
+
+<p>The parking process is divided into <strong>substates</strong> that simulate a real parking maneuver:</p>
+
+<ol>
+  <li><strong>Reverse:</strong> the vehicle steers backward at a certain angle until it detects an increase in the lateral distance.</li>
+  <li><strong>Forward:</strong> it continues reversing while correcting the steering angle until it reaches a minimum safe distance from the car behind or the car in front.</li>
+  <li><strong>Straighten:</strong> it moves slightly forward while straightening the wheels to end up fully aligned within the parking space.</li>
+</ol>
+
+<p>At the end of this sequence, the vehicle is properly parked and stops.</p>
+
+<h3 id="5º-state-manouvre_1-"><b>5º State: MANOUVRE_1 </b></h3>
+
+<p>If the detected space is <strong>open at the front</strong> (type 1), the maneuver differs slightly:</p>
+
+<ul>
+  <li>The vehicle moves forward while turning to the right.</li>
+  <li>When the lateral space increases enough, it straightens the wheels.</li>
+  <li>Then, it reverses to center its position within the parking space.</li>
+</ul>
+
+<p>This procedure ensures <strong>efficient and safe parking</strong>, adapting to the different types of spaces encountered.</p>
+
+<h2 id="inconvenients-and-solutions"><b>Inconvenients and Solutions</b></h2>
+
+<ul>
+  <li><strong>Infinite sensor readings:</strong> when the lasers did not detect any obstacles, they returned <code class="language-plaintext highlighter-rouge">inf</code>. This was solved using the <code class="language-plaintext highlighter-rouge">clean()</code> function, which replaces these values with the maximum measurable range.</li>
+  <li><strong>Unstable alignment:</strong> small oscillations were observed when trying to maintain parallelism with the parked cars. This was stabilized by adjusting the proportional factor <code class="language-plaintext highlighter-rouge">k</code> of the error control.</li>
+  <li><strong>Sudden substate changes:</strong> distance thresholds (<code class="language-plaintext highlighter-rouge">threshold_distance</code>) and short time delays were added to prevent incorrect transitions between phases.</li>
+</ul>
+
+<h2 id="demonstration"><b>Demonstration</b></h2>
+
+<p>In the following videos, the complete sequence can be observed: <strong>space search</strong>, <strong>identification</strong>, and <strong>parking maneuver</strong>.</p>
+
+<p><strong>Parking with a car in front and another behind</strong></p>
+
+<div style="text-align: center;">
+    <video width="500" controls="">
+      <source src="/assets/videos/p3_service/aparcar_delante_atras_recortado.mp4" type="video/mp4" />
+      Tu navegador no soporta la reproducción de videos.
+    </video>
+</div>
+
+<p><strong>Parking with only a car behind</strong></p>
+
+<div style="text-align: center;">
+    <video width="500" controls="">
+      <source src="/assets/videos/p3_service/aparcar_para_atras_recortado.mp4" type="video/mp4" />
+      Tu navegador no soporta la reproducción de videos.
+    </video>
+</div>
+
+<p><strong>Parking with only a car in front</strong></p>
+
+<div style="text-align: center;">
+    <video width="500" controls="">
+      <source src="/assets/videos/p3_service/aparcar_delante_recortado.mp4" type="video/mp4" />
+      Tu navegador no soporta la reproducción de videos.
+    </video>
+</div>]]></content><author><name></name></author><category term="service-robotics" /><summary type="html"><![CDATA[Description]]></summary></entry><entry><title type="html">Rescue people</title><link href="http://localhost:4000/2025/10/22/p2-rescue-people.html" rel="alternate" type="text/html" title="Rescue people" /><published>2025-10-22T00:00:00+02:00</published><updated>2025-10-22T00:00:00+02:00</updated><id>http://localhost:4000/2025/10/22/p2-rescue-people</id><content type="html" xml:base="http://localhost:4000/2025/10/22/p2-rescue-people.html"><![CDATA[<h2 id="description"><b>Description</b></h2>
 
 <p>This practice consists of the detection of the survivors in an area with a coverage algorithm and a face detection algorithm.</p>
 
@@ -28,11 +130,17 @@
 
 <p>Some good practices include rotate each frame before trying to detect a face in it. There was also a issue where the algorithm sometimes detected a face in the water, so a color filtered was applied to remove blue tones, making the people detection more accurate.</p>
 
+<p>When our drone flies over the area, the downward-facing camera detects people on the ground. To locate each person precisely, we use the center of their face in the image as a reference.</p>
+
+<p>First, the face detector gives us a bounding box around the face. If we rotated the image to improve detection, we transform those coordinates back to the original image.</p>
+
+<p>Using the drone’s height and the camera’s field of view, we convert the face’s pixel position into real-world ground distances. Finally, adding the drone’s position gives us the exact coordinates of the person on the map, ready to mark their location or send alerts.</p>
+
 <p align="center">
   <img src="/assets/images/p2_servicios/salida.gif" width="500" />
 </p>
 
-<h4 id="4º-ficticial-battery"><b>4º Ficticial battery</b></h4>
+<h4 id="4-ficticial-battery"><b>4 Ficticial battery</b></h4>
 
 <p>To make the simulation as realistic as possible, the dron’s battery is modeled. The dron’s battery lasts 15 minutes, and when it runs out, the dron returns to the base on the boat and waits for 5 seconds, to simulate charging.</p>
 
@@ -797,59 +905,4 @@ The proportional part adjusts the output in proportion to the error; that is, if
 
 <h2 id="conclusion">Conclusion</h2>
 
-<p>Clearly, this algorithm is not the fastest, but in my opinion, it is quite robust and effective. I wasn’t looking for a fast car; I aimed for a car with control that has “smooth” movements, meaning it experiences minimal oscillation. As a final result, the car shows little oscillation and maintains control over both linear and angular velocity, which seems like a good outcome.</p>]]></content><author><name></name></author><category term="mobile-robotics" /><summary type="html"><![CDATA[Description The objective of this practice is to create a line follower that completes the circuit in the shortest possible time. In this case, the Formula 1 car follows a red line, and a PD controller will be used to control the angular and linear speed of the system.]]></summary></entry><entry><title type="html">P1 Vacuum Cleaner</title><link href="http://localhost:4000/2024/09/16/p1-vacuum-cleaner.html" rel="alternate" type="text/html" title="P1 Vacuum Cleaner" /><published>2024-09-16T00:00:00+02:00</published><updated>2024-09-16T00:00:00+02:00</updated><id>http://localhost:4000/2024/09/16/p1-vacuum-cleaner</id><content type="html" xml:base="http://localhost:4000/2024/09/16/p1-vacuum-cleaner.html"><![CDATA[<h2 id="description">Description</h2>
-<p> 
-The goal is to develop a software for a vacuum cleaner robot. The robot must explore the most surface of the house.
-For that, we only have the laser sensor and the bumper; therefore the software for this application is not quite difficult.</p>
-
-<p>Remember that the vacuum cleaner cannot make use of localization algorithms.</p>
-
-<p> </p>
-<h2 id="hardware">Hardware</h2>
-
-<div style="text-align: center;">
-    <img src="/assets/images/Captura desde 2024-09-27 15-52-32.png" alt="Aspiradora Robot" />
-</div>
-<p> </p>
-<ul>
-  <li>
-    <p>As actuators, we have the wheels of the robot, which can move in a linear and angular way.</p>
-  </li>
-  <li>
-    <p>As sensors, we have a laser LIDAR 180º and a bumper.</p>
-  </li>
-</ul>
-
-<p> </p>
-<h2 id="software">Software</h2>
-<p> 
-The system must be reactive, so that I have developed a state machine whose behavior is described below.
- </p>
-<div style="text-align: center;">
-    <img src="/assets/images/p1-vacuum-cleaner.drawio.png" alt="Aspiradora Robot" />
-</div>
-<p> 
-As you can see, my solution to the problem is a reactive and random algorithm, in which the movements in the “Turn” and “Forward” states are random. However, when the robot collides and activates the bumper state, it first moves slightly backward and then has two options. One is “Turn max angle”, which, as the name suggests, uses the laser to find the direction with the greatest detected distance and turns towards it accordingly. The other option is “Turn half angle”, where the robot rotates on its axis and changes direction by turning approximately 180º.</p>
-
-<h3 id="videos">Videos</h3>
-<p> 
-In this video, you can see the robot’s operation. The video is at 4x speed, so it will appear accelerated.
- </p>
-<div style="text-align: center;">
-    <video width="600" controls="">
-      <source src="/assets/videos/Video-completo.webm" type="video/webm" />
-      Tu navegador no soporta la reproducción de videos.
-    </video>
-</div>
-<p> 
-In this other video, you can see how the robot exits the room, avoiding getting trapped inside it.</p>
-<div style="text-align: center;">
-    <video width="400" controls="">
-      <source src="/assets/videos/Video-habitaci%C3%B3n.webm" type="video/webm" />
-      Tu navegador no soporta la reproducción de videos.
-    </video>
-</div>
-<p> </p>
-
-<h2 id="conclusion">Conclusion</h2>
-<p>At first, when the practice was presented to us, I thought about creating complex software using geometric shapes that would cover the largest possible area. However, in reality, developing complex software to perform these tasks did not seem appropriate for this practice, as we had to develop a reactive algorithm. Therefore, I ultimately opted for a random algorithm that provides random movements and is constantly checking the sensors, which is where the reactivity comes from. This resulted in a simple algorithm for a sensory cleaning robot.</p>]]></content><author><name></name></author><category term="mobile-robotics" /><summary type="html"><![CDATA[Description   The goal is to develop a software for a vacuum cleaner robot. The robot must explore the most surface of the house. For that, we only have the laser sensor and the bumper; therefore the software for this application is not quite difficult.]]></summary></entry></feed>
+<p>Clearly, this algorithm is not the fastest, but in my opinion, it is quite robust and effective. I wasn’t looking for a fast car; I aimed for a car with control that has “smooth” movements, meaning it experiences minimal oscillation. As a final result, the car shows little oscillation and maintains control over both linear and angular velocity, which seems like a good outcome.</p>]]></content><author><name></name></author><category term="mobile-robotics" /><summary type="html"><![CDATA[Description The objective of this practice is to create a line follower that completes the circuit in the shortest possible time. In this case, the Formula 1 car follows a red line, and a PD controller will be used to control the angular and linear speed of the system.]]></summary></entry></feed>

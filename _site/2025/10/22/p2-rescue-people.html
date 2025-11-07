@@ -77,11 +77,17 @@
 
 <p>Some good practices include rotate each frame before trying to detect a face in it. There was also a issue where the algorithm sometimes detected a face in the water, so a color filtered was applied to remove blue tones, making the people detection more accurate.</p>
 
+<p>When our drone flies over the area, the downward-facing camera detects people on the ground. To locate each person precisely, we use the center of their face in the image as a reference.</p>
+
+<p>First, the face detector gives us a bounding box around the face. If we rotated the image to improve detection, we transform those coordinates back to the original image.</p>
+
+<p>Using the drone’s height and the camera’s field of view, we convert the face’s pixel position into real-world ground distances. Finally, adding the drone’s position gives us the exact coordinates of the person on the map, ready to mark their location or send alerts.</p>
+
 <p align="center">
   <img src="/assets/images/p2_servicios/salida.gif" width="500" />
 </p>
 
-<h4 id="4º-ficticial-battery"><b>4º Ficticial battery</b></h4>
+<h4 id="4-ficticial-battery"><b>4 Ficticial battery</b></h4>
 
 <p>To make the simulation as realistic as possible, the dron’s battery is modeled. The dron’s battery lasts 15 minutes, and when it runs out, the dron returns to the base on the boat and waits for 5 seconds, to simulate charging.</p>
 
