@@ -66,7 +66,7 @@ In this case, the space is define by **ReedsSheppStateSpace** using a **turning 
 
 <div style="text-align: center;">
     <video width="500" controls>
-      <source src="{{ '/assets/videos/p4_service/holonomic.mp4' | relative_url }}" type="video/mp4">
+      <source src="{{ '/assets/videos/p4_service/holonomic_2.mp4' | relative_url }}" type="video/mp4">
       Tu navegador no soporta la reproducción de videos.
     </video>
 </div>
@@ -75,14 +75,14 @@ In this case, the space is define by **ReedsSheppStateSpace** using a **turning 
 
 <div style="text-align: center;">
     <video width="500" controls>
-      <source src="{{ '/assets/videos/p4_service/Ackermann1.mp4' | relative_url }}" type="video/mp4">
+      <source src="{{ '/assets/videos/p4_service/Ackermann1_2.mp4' | relative_url }}" type="video/mp4">
       Tu navegador no soporta la reproducción de videos.
     </video>
 </div>
 
 <div style="text-align: center;">
     <video width="500" controls>
-      <source src="{{ '/assets/videos/p4_service/Ackermann2.mp4' | relative_url }}" type="video/mp4">
+      <source src="{{ '/assets/videos/p4_service/Ackermann2_2.mp4' | relative_url }}" type="video/mp4">
       Tu navegador no soporta la reproducción de videos.
     </video>
 </div>
