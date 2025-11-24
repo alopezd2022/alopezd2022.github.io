@@ -1,4 +1,90 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2025-11-07T12:06:35+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">PRACTICES</title><entry><title type="html">Autonomous Parking</title><link href="http://localhost:4000/2025/11/07/p3-autoparking.html" rel="alternate" type="text/html" title="Autonomous Parking" /><published>2025-11-07T00:00:00+01:00</published><updated>2025-11-07T00:00:00+01:00</updated><id>http://localhost:4000/2025/11/07/p3-autoparking</id><content type="html" xml:base="http://localhost:4000/2025/11/07/p3-autoparking.html"><![CDATA[<h2 id="description"><b>Description</b></h2>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2025-11-24T12:36:38+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">PRACTICES</title><entry><title type="html">Logistic robot</title><link href="http://localhost:4000/2025/11/24/p4-amazon-warehouse.html" rel="alternate" type="text/html" title="Logistic robot" /><published>2025-11-24T00:00:00+01:00</published><updated>2025-11-24T00:00:00+01:00</updated><id>http://localhost:4000/2025/11/24/p4-amazon-warehouse</id><content type="html" xml:base="http://localhost:4000/2025/11/24/p4-amazon-warehouse.html"><![CDATA[<h2 id="description"><b>Description</b></h2>
+
+<p>This practice consists of programming a <strong>logistic robot</strong> that holds the shelf and move to a determinate point at a warehouse.</p>
+
+<p>For this purpose, <strong>OMPL</strong> is used to get the path for each point and a reactive control is used to move along the warehouse.</p>
+
+<p>In this practice there are two different robots, <strong>holonomic</strong> and <strong>Ackermann</strong>. The first solution to this pratice is using the <strong>holonomic robot</strong> and applying <strong>differents geometries</strong> to validate the path. The second solution is using an <strong>Ackermann robot</strong> and applying <strong>differents geometries</strong> to validate the path.</p>
+
+<h2 id="strategy"><b>Strategy</b></h2>
+
+<p>The overall operation of the system is based on a <strong>state machine</strong> that changes dynamically:</p>
+
+<div style="text-align: center;">
+    <img src="/assets/images/p4_servicios/maquinaestados.png" alt="sin erosión" style="width: 300px; display: inline-block; margin: 0 10px;" />
+</div>
+
+<h3 id="1º-state-start-"><b>1º State: START </b></h3>
+
+<p>In this phase, the global variable are initialize and the execution starts.</p>
+
+<h3 id="2º-state-planning-"><b>2º State: PLANNING </b></h3>
+
+<p>In this phase, get the actual pose of the robot in order to use it as the start point for the OMPL algorithm. 
+If a plan is found, switch to the <strong>GOTO</strong> state.</p>
+
+<h3 id="3º-state-goto-"><b>3º State: GOTO </b></h3>
+
+<p>In this phase, the robot is controlled to reach a certain point using the function <strong>move_control</strong> which implements a P control. When a point is reached by the robot, the state switches to <strong>CHANGE_TARGET</strong> in which the target of the path is changed or if the path is complete switches to <strong>GET_SHELF</strong></p>
+
+<h3 id="4º-state-get_shelf-"><b>4º State: GET_SHELF </b></h3>
+
+<p>In this phase, the shelf is lifted and is deleted from the map. It is important because we get the new state of the warehouse because the shelf is no longer in that position and is going to be in other position.</p>
+
+<h3 id="5º-state-return_shelf-"><b>5º State: RETURN_SHELF </b></h3>
+
+<p>In this phase, the OMPL algorithm plan a path to place the shelf in a different position. And switches to <strong>GOTO</strong> to reach the new position.</p>
+
+<h3 id="6º-state-leave_shelf-"><b>6º State: LEAVE_SHELF </b></h3>
+
+<p>In this phase, the shelf is put down and the new position is added to the map. And a new shelf is selected to place to a diferrent position.</p>
+
+<h3 id="ompl-implementation"><b>OMPL Implementation</b></h3>
+
+<p>The space where the algorithm can plan is define, the start position and the goal position. The state validate function is also define in where we validate if a state is correct or not. In order to check the state, this function checks whether the robot can safely occupy a specific position on the map without colliding with anything. It first transforms the robot’s position and orientation into the map’s coordinate system. Then it estimates the <strong>geometry</strong> the robot (or the robot carrying a shelf) would occupy and verifies whether that space lies within a free area. If any part of that geometry falls outside the map or overlaps with an obstacle, the position is considered invalid. In essence, it is a collision-checking step that ensures the robot only evaluates movements that are <strong>physically feasible</strong>. And the planner used is <strong>RRTstar</strong>, which return the shortest and most optimal path.</p>
+
+<ul>
+  <li><b>HOLONOMIC </b></li>
+</ul>
+
+<p>In this case, the space is define by <strong>SE2StateSpace</strong>. And the size of the geometry to check in the validator is different because of robot’s size.</p>
+
+<ul>
+  <li><b>ACKERMANN </b></li>
+</ul>
+
+<p>In this case, the space is define by <strong>ReedsSheppStateSpace</strong> using a <strong>turning radius</strong>. And the size of the geometry to check in the validator is different because of robot’s size.</p>
+
+<h2 id="demonstration"><b>Demonstration</b></h2>
+
+<ul>
+  <li><b>HOLONOMIC </b></li>
+</ul>
+
+<div style="text-align: center;">
+    <video width="500" controls="">
+      <source src="/assets/videos/p4_service/holonomic.mp4" type="video/mp4" />
+      Tu navegador no soporta la reproducción de videos.
+    </video>
+</div>
+
+<ul>
+  <li><b>ACKERMANN </b></li>
+</ul>
+
+<div style="text-align: center;">
+    <video width="500" controls="">
+      <source src="/assets/videos/p4_service/Ackermann1.mp4" type="video/mp4" />
+      Tu navegador no soporta la reproducción de videos.
+    </video>
+</div>
+
+<div style="text-align: center;">
+    <video width="500" controls="">
+      <source src="/assets/videos/p4_service/Ackermann2.mp4" type="video/mp4" />
+      Tu navegador no soporta la reproducción de videos.
+    </video>
+</div>]]></content><author><name></name></author><category term="service-robotics" /><summary type="html"><![CDATA[Description]]></summary></entry><entry><title type="html">Autonomous Parking</title><link href="http://localhost:4000/2025/11/07/p3-autoparking.html" rel="alternate" type="text/html" title="Autonomous Parking" /><published>2025-11-07T00:00:00+01:00</published><updated>2025-11-07T00:00:00+01:00</updated><id>http://localhost:4000/2025/11/07/p3-autoparking</id><content type="html" xml:base="http://localhost:4000/2025/11/07/p3-autoparking.html"><![CDATA[<h2 id="description"><b>Description</b></h2>
 
 <p>This practice consists of developing an <strong>autonomous system</strong> capable of <strong>detecting a parking space</strong> and <strong>performing the parking maneuver</strong> without human intervention.
 For this purpose, data from <strong>laser sensors</strong> located at the <strong>front</strong>, <strong>rear</strong>, and <strong>sides</strong> of the vehicle are used, along with <strong>speed (V)</strong> and <strong>steering (W)</strong> control.</p>
@@ -826,83 +912,4 @@ Breadth-First Search consists of expanding an unvisited node and its successors 
       Tu navegador no soporta la reproducción de videos.
     </video>
 
-</div>]]></content><author><name></name></author><category term="mobile-robotics" /><summary type="html"><![CDATA[Description]]></summary></entry><entry><title type="html">P2 Follow Line</title><link href="http://localhost:4000/2024/09/30/p2-follow-line.html" rel="alternate" type="text/html" title="P2 Follow Line" /><published>2024-09-30T00:00:00+02:00</published><updated>2024-09-30T00:00:00+02:00</updated><id>http://localhost:4000/2024/09/30/p2-follow-line</id><content type="html" xml:base="http://localhost:4000/2024/09/30/p2-follow-line.html"><![CDATA[<h2 id="description">Description</h2>
-<p>The objective of this practice is to create a line follower that completes the circuit in the shortest possible time. In this case, the Formula 1 car follows a red line, and a PD controller will be used to control the angular and linear speed of the system.</p>
-
-<h2 id="hardware">Hardware</h2>
-
-<p>In this practice, we have a Formula 1 car equipped with a camera to follow the line. Therefore, the sensor is the camera, and the actuators are the motors of the Formula 1 car.</p>
-
-<div style="text-align: center;">
-    <img src="/assets/images/p2/Captura desde 2024-10-11 10-03-10.png" alt="HSV" style="width: 300px" />
-</div>
-
-<h2 id="software">Software</h2>
-
-<h3 id="the-color-filtering">The color filtering</h3>
-
-<p>The color filtering is done using HSV, a system in which I can adjust the color range (in this case, red), brightness, and saturation of the color. With these three parameters, I can accurately control all shades of red, avoiding any external elements such as the incidence of unexpected light.</p>
-
-<div style="text-align: center;">
-    <img src="/assets/images/p2/gyuw4.png" alt="HSV" style="width: 500px" />
-</div>
-<p> </p>
-<h3 id="strategy-1">Strategy 1</h3>
-<p>My first strategy was to take a bounding box from the image and count how many red pixels there were on both the left and right sides. The difference between them would represent the error of our system. However, this algorithm was neither precise nor robust, as it did not account for situations like curves, where both the left and right sides could have the same number of pixels.</p>
-
-<div style="text-align: center;">
-    <img src="/assets/images/p2/Captura desde 2024-10-11 09-34-36.png" alt="HSV" style="width: 350px" />
-</div>
-
-<p>Since this solution was not valid, I decided to increase the size of the bounding box, but that didn’t work either. I even tried using the entire image, but it still didn’t work due to the same problem.</p>
-
-<p> </p>
-<h3 id="strategy-2">Strategy 2</h3>
-
-<p>The second strategy consists of taking two lines, one horizontal and one vertical. For each line, the average of the red pixels at that moment is calculated. The point obtained from these two averages is the point the car should always follow, meaning it represents where the car should always be.</p>
-
-<p>Therefore, the error in our system is the difference between the fixed center point of the image (the intersection of the horizontal and vertical lines) and the point obtained from the average of the red pixels, which indicates where the car should be. However, I chose to divide the error into two distinct errors, as the difference along the horizontal axis indicates how much the car needs to turn, while the difference along the vertical axis indicates how much the car needs to move forward.</p>
-
-<p>With two errors—one for angular velocity and one for linear velocity—we obtain two different controllers, making our strategy more precise and robust.</p>
-
-<p>The blue point seen in the image represents the average position of the red pixels in both the horizontal and vertical directions, while the drawn cross is the point where the car should be.</p>
-
-<p>Additionally, when the car loses the line, it turns to the last saved angle.</p>
-
-<div style="text-align: center;">
-    <img src="/assets/images/p2/Captura desde 2024-10-10 17-11-46.png" alt="HSV" style="width: 350px" />
-</div>
-
-<p> </p>
-<h3 id="control">Control</h3>
-
-<p>We are going to implement a PD controller, which is a feedback control mechanism that adjusts the output based on the error obtained from the difference between the desired value and the current value. This controller uses two components to reduce the error and achieve a better system response: the proportional part and the derivative part.</p>
-
-<p>Proportional</p>
-
-<p> 
-The proportional part adjusts the output in proportion to the error; that is, if the error is large, the controller’s output will also be large.</p>
-
-<p>It is calculated as the error multiplied by the proportional constant Kp. The constant determines the intensity of the system’s output relative to the error.</p>
-
-<p>Derivative
- </p>
-
-<p>The derivative part measures the change in the error over time. It assesses how quickly the error is changing and adjusts the output based on that change.</p>
-
-<p>It is calculated as the derivative of the error multiplied by a derivative constant.</p>
-
-<h3 id="result">Result</h3>
-
-<p>After explaining the filtering, tracking algorithm, and control, the result is a Formula 1 car that completes the circuit in approximately 100 seconds.</p>
-
-<div style="text-align: center;">
-    <video width="400" controls="">
-      <source src="/assets/videos/p2/cochesimple.mp4" type="video/mp4" />
-      Tu navegador no soporta la reproducción de videos.
-    </video>
-</div>
-
-<h2 id="conclusion">Conclusion</h2>
-
-<p>Clearly, this algorithm is not the fastest, but in my opinion, it is quite robust and effective. I wasn’t looking for a fast car; I aimed for a car with control that has “smooth” movements, meaning it experiences minimal oscillation. As a final result, the car shows little oscillation and maintains control over both linear and angular velocity, which seems like a good outcome.</p>]]></content><author><name></name></author><category term="mobile-robotics" /><summary type="html"><![CDATA[Description The objective of this practice is to create a line follower that completes the circuit in the shortest possible time. In this case, the Formula 1 car follows a red line, and a PD controller will be used to control the angular and linear speed of the system.]]></summary></entry></feed>
+</div>]]></content><author><name></name></author><category term="mobile-robotics" /><summary type="html"><![CDATA[Description]]></summary></entry></feed>
