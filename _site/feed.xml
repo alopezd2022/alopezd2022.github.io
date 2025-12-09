@@ -1,4 +1,85 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2025-11-24T12:36:38+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">PRACTICES</title><entry><title type="html">Logistic robot</title><link href="http://localhost:4000/2025/11/24/p4-amazon-warehouse.html" rel="alternate" type="text/html" title="Logistic robot" /><published>2025-11-24T00:00:00+01:00</published><updated>2025-11-24T00:00:00+01:00</updated><id>http://localhost:4000/2025/11/24/p4-amazon-warehouse</id><content type="html" xml:base="http://localhost:4000/2025/11/24/p4-amazon-warehouse.html"><![CDATA[<h2 id="description"><b>Description</b></h2>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2025-12-09T12:50:36+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">PRACTICES</title><entry><title type="html">Autonomous Frontier Exploration</title><link href="http://localhost:4000/2025/12/09/p5-laser-mapping.html" rel="alternate" type="text/html" title="Autonomous Frontier Exploration" /><published>2025-12-09T00:00:00+01:00</published><updated>2025-12-09T00:00:00+01:00</updated><id>http://localhost:4000/2025/12/09/p5-laser-mapping</id><content type="html" xml:base="http://localhost:4000/2025/12/09/p5-laser-mapping.html"><![CDATA[<h2 id="description"><b>Description</b></h2>
+
+<p>This practice focuses on programming a <strong>robot capable of autonomously exploring an environment</strong> using <strong>occupancy grid mapping</strong> and <strong>frontier-based exploration</strong>.</p>
+
+<p>The robot uses its <strong>laser sensor</strong> to detect obstacles and free space, updating a <strong>probabilistic map</strong> in real-time using <strong>log-odds representation</strong>. The exploration strategy relies on detecting <strong>frontiers</strong>, which are the boundaries between known free space and unknown regions, to dynamically generate exploration targets.</p>
+
+<h2 id="strategy"><b>Strategy</b></h2>
+
+<p>The overall operation of the system is implemented as a <strong>state machine</strong> with two main states:</p>
+
+<h3 id="1º-state-update-"><b>1º State: UPDATE </b></h3>
+
+<p>In this phase, the robot:</p>
+
+<ul>
+  <li>Retrieves the <strong>current odometry</strong> and <strong>laser scan data</strong>.</li>
+  <li>Updates the <strong>occupancy grid</strong> using a log-odds approach.</li>
+  <li>Detects <strong>frontiers</strong> in the map by searching for cells that border unknown areas.</li>
+  <li>If a valid frontier is found, the system switches to the <strong>MOVE</strong> state to navigate towards it. Otherwise, the robot moves forward safely or rotates if an obstacle is detected.</li>
+</ul>
+
+<h3 id="2º-state-move-"><b>2º State: MOVE </b></h3>
+
+<p>In this phase, the robot:</p>
+
+<ul>
+  <li>Follows a path generated from the current position to the selected frontier using a simple <strong>proportional controller</strong>.</li>
+  <li>Checks continuously whether the <strong>path and surrounding cells are safe</strong> before moving.</li>
+  <li>Stops when the target is reached and returns to the <strong>UPDATE</strong> state to detect new frontiers.</li>
+</ul>
+
+<h2 id="mapping-implementation"><b>Mapping Implementation</b></h2>
+
+<p>The map is represented as a <strong>2D grid of log-odds values</strong>, which are updated as follows:</p>
+
+<ul>
+  <li><strong>Occupied cells</strong> (obstacles detected by the laser) increase the log-odds by log_odds_hit.</li>
+  <li><strong>Free cells</strong> (laser passes through them) decrease the log-odds by log_odds_free.</li>
+  <li>The probability of occupancy is obtained via the <strong>sigmoid function</strong>:</li>
+</ul>
+<div style="text-align: center;">
+p = 1 - 1 / (1 + e^l)
+</div>
+<p>where (l) is the log-odds value.</p>
+
+<p>The <strong>Bresenham algorithm</strong> is used to efficiently trace the line between the robot and the detected obstacle, marking free cells along the path.</p>
+
+<h2 id="frontier-detection"><b>Frontier Detection</b></h2>
+
+<p>Frontiers are detected by exploring the free space and identifying cells that are <strong>adjacent to unknown areas</strong>. The algorithm:</p>
+
+<ol>
+  <li>Starts from the robot’s current position.</li>
+  <li>Uses a <strong>breadth-first search</strong> to explore free cells.</li>
+  <li>Detects cells at the boundary of unknown space as frontiers.</li>
+  <li>Validates safety by checking a <strong>local square around the frontier</strong> for obstacles.</li>
+</ol>
+
+<p>Once a valid frontier is found, the robot generates a <strong>path</strong> towards it and switches to the <strong>MOVE</strong> state.</p>
+
+<h2 id="control-and-navigation"><b>Control and Navigation</b></h2>
+
+<p>The robot uses a <strong>reactive proportional controller</strong> to navigate:</p>
+
+<ul>
+  <li>If the <strong>angle error</strong> to the target is large, the robot rotates in place.</li>
+  <li>If the path is clear, the robot moves forward.</li>
+  <li>The controller ensures that the robot <strong>avoids collisions</strong> and reaches the target safely.</li>
+</ul>
+
+<p>Additionally, the robot checks if the <strong>forward path is clear</strong> using the laser scanner, adjusting its movement dynamically.</p>
+
+<h2 id="demonstration"><b>Demonstration</b></h2>
+
+<div style="text-align: center;">
+    <video width="500" controls="">
+      <source src="/assets/videos/p5_service/output_fast.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+</div>
+
+<p>This demonstration shows the robot autonomously exploring an unknown environment, updating its occupancy map, and navigating safely to discovered frontiers.</p>]]></content><author><name></name></author><category term="service-robotics" /><summary type="html"><![CDATA[Description]]></summary></entry><entry><title type="html">Logistic robot</title><link href="http://localhost:4000/2025/11/24/p4-amazon-warehouse.html" rel="alternate" type="text/html" title="Logistic robot" /><published>2025-11-24T00:00:00+01:00</published><updated>2025-11-24T00:00:00+01:00</updated><id>http://localhost:4000/2025/11/24/p4-amazon-warehouse</id><content type="html" xml:base="http://localhost:4000/2025/11/24/p4-amazon-warehouse.html"><![CDATA[<h2 id="description"><b>Description</b></h2>
 
 <p>This practice consists of programming a <strong>logistic robot</strong> that holds the shelf and move to a determinate point at a warehouse.</p>
 
@@ -63,7 +144,7 @@ If a plan is found, switch to the <strong>GOTO</strong> state.</p>
 
 <div style="text-align: center;">
     <video width="500" controls="">
-      <source src="/assets/videos/p4_service/holonomic.mp4" type="video/mp4" />
+      <source src="/assets/videos/p4_service/holonomic_2.mp4" type="video/mp4" />
       Tu navegador no soporta la reproducción de videos.
     </video>
 </div>
@@ -74,14 +155,14 @@ If a plan is found, switch to the <strong>GOTO</strong> state.</p>
 
 <div style="text-align: center;">
     <video width="500" controls="">
-      <source src="/assets/videos/p4_service/Ackermann1.mp4" type="video/mp4" />
+      <source src="/assets/videos/p4_service/Ackerman1_2.mp4" type="video/mp4" />
       Tu navegador no soporta la reproducción de videos.
     </video>
 </div>
 
 <div style="text-align: center;">
     <video width="500" controls="">
-      <source src="/assets/videos/p4_service/Ackermann2.mp4" type="video/mp4" />
+      <source src="/assets/videos/p4_service/Ackerman2_2.mp4" type="video/mp4" />
       Tu navegador no soporta la reproducción de videos.
     </video>
 </div>]]></content><author><name></name></author><category term="service-robotics" /><summary type="html"><![CDATA[Description]]></summary></entry><entry><title type="html">Autonomous Parking</title><link href="http://localhost:4000/2025/11/07/p3-autoparking.html" rel="alternate" type="text/html" title="Autonomous Parking" /><published>2025-11-07T00:00:00+01:00</published><updated>2025-11-07T00:00:00+01:00</updated><id>http://localhost:4000/2025/11/07/p3-autoparking</id><content type="html" xml:base="http://localhost:4000/2025/11/07/p3-autoparking.html"><![CDATA[<h2 id="description"><b>Description</b></h2>
@@ -871,45 +952,4 @@ Breadth-First Search consists of expanding an unvisited node and its successors 
       Tu navegador no soporta la reproducción de videos.
     </video>
 
-</div></div>]]></content><author><name></name></author><category term="mobile-robotics" /><summary type="html"><![CDATA[Description]]></summary></entry><entry><title type="html">P3 Obstacle Avoidance</title><link href="http://localhost:4000/2024/10/14/p3-obstacle_avoidance.html" rel="alternate" type="text/html" title="P3 Obstacle Avoidance" /><published>2024-10-14T00:00:00+02:00</published><updated>2024-10-14T00:00:00+02:00</updated><id>http://localhost:4000/2024/10/14/p3-obstacle_avoidance</id><content type="html" xml:base="http://localhost:4000/2024/10/14/p3-obstacle_avoidance.html"><![CDATA[<h2 id="description">Description</h2>
-
-<p>The aim of this practice is to program a Formula 1 car which can avoid obstacle using Virtual Force Field system. In this case, we are going to develop a local navigating algorthims so that the car can move throw the circuit reaching the waypoints and avoiding the obstacles.</p>
-
-<div style="text-align: center;">
-    <img src="/assets/images/p3/coche.png" alt="car" style="width: 300px" />
-</div>
-
-<h2 id="hardware">Hardware</h2>
-
-<p>The sensor is the laser LIDAR 180º and the actuators are as always the motor of the Formula 1 car.</p>
-
-<h2 id="software">Software</h2>
-
-<p>The strategy for this practice is develop a local navegation algorthim called VFF (Virtual Force Field). Is a navegation tecnice which allows our formula 1 car to move in a environment avoiding obstacles. Basically, the direction of the car is given by the attractive force generated by the position of the goal.</p>
-
-<h3 id="vff">VFF</h3>
-<p>The attractive vector is the vector drawn from the car’s position to the waypoint. This vector becomes very strong over long distances, so we will apply a force reducer.</p>
-
-<p>The repulsive vector is the result of a weighted average of all the vectors drawn for all the angles of the laser. It is a weighted average because, in certain situations, such as very short distances, they do not have enough weight, and therefore the repulsive vector is not effective.</p>
-
-<p>The resulting force should be the weighted average of both the attractive and repulsive vectors. Depending on the factors we assign to each, one vector will have more weight than the other. In this case, I found it more convenient to give greater weight to the repulsive vector so that it prioritizes avoiding obstacles.</p>
-
-<h4 id="strategies-to-highlight">Strategies to highlight</h4>
-
-<p>Reduce the size of the attractive vector, as at very high distances, it exerts too much force.</p>
-
-<p>Increase the weight of small distances measured by the laser, so that when calculating the repulsive vector, these distances have more significance.</p>
-
-<p>The linear velocity depends on the distance calculated as the magnitude of the resulting vector from the weighted average of both forces. This way, at short distances, the speed is reduced to allow for precise evasion.</p>
-
-<p> </p>
-
-<p>Here it is a video with the behavior of the formula 1 car.</p>
-
-<div style="text-align: center;">
-    <video width="500" controls="">
-      <source src="/assets/videos/p3/cochevueltacompleta.webm" type="video/webm" />
-      Tu navegador no soporta la reproducción de videos.
-    </video>
-
-</div>]]></content><author><name></name></author><category term="mobile-robotics" /><summary type="html"><![CDATA[Description]]></summary></entry></feed>
+</div></div>]]></content><author><name></name></author><category term="mobile-robotics" /><summary type="html"><![CDATA[Description]]></summary></entry></feed>
