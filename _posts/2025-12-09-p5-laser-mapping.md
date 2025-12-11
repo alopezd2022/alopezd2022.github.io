@@ -75,6 +75,8 @@ Additionally, the robot checks if the **forward path is clear** using the laser 
 
 ## <b>Demonstration</b>
 
+This demonstration shows the robot autonomously exploring an unknown environment, updating its occupancy map, and navigating safely to discovered frontiers.
+
 <div style="text-align: center;">
     <video width="500" controls>
       <source src="{{ '/assets/videos/p5_service/output_fast.mp4' | relative_url }}" type="video/mp4">
@@ -82,4 +84,12 @@ Additionally, the robot checks if the **forward path is clear** using the laser 
     </video>
 </div>
 
-This demonstration shows the robot autonomously exploring an unknown environment, updating its occupancy map, and navigating safely to discovered frontiers.
+This demonstration shows the robot autonomously exploring but using Odom2 which has more noise.
+
+<div style="text-align: center;">
+    <video width="500" controls>
+      <source src="{{ '/assets/videos/p5_service/video_odom2.mp4' | relative_url }}" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+</div>
+
